@@ -6,11 +6,14 @@
   "model": {
     "provider": "meta",
     "modelName": "muse-spark-1.3",
+    "toolModel": "muse-spark-1.3",
+    "synthesisModel": "muse-wonder-1.0",
     "baseUrl": "https://api.meta.ai/v1",
     "reasoningEffort": "medium"
   },
   "limits": {
-    "maxSteps": 1,
+    "maxSteps": 8,
+    "maxParallelToolCalls": 5,
     "maxToolResultLength": 4000
   },
   "mcpServers": {
@@ -18,13 +21,18 @@
       "command": "memvison/.venv/Scripts/python.exe",
       "args": ["main.py", "mcp"],
       "cwd": "memvison",
-      "env": {}
+      "env": {
+        "MEMVISION_DB_PATH": "./memvison/data/memvision.db",
+        "MEMVISION_SCREENSHOTS_DIR": "./memvison/data/screenshots"
+      }
     },
     "cli-bridge": {
       "command": "node",
-      "args": ["build/index.js"],
-      "cwd": "cli-bridge",
-      "env": {}
+      "args": ["build/index.js", "--policy", "policy.json"],
+      "cwd": "../cli-bridge",
+      "env": {
+        "WORKSPACE_ROOT": "."
+      }
     }
   }
 }

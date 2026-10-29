@@ -47,6 +47,12 @@
 
 ---
 
+> [!IMPORTANT]
+> **Hackathon Prior Work & External Tool Disclosure:**  
+> Per official Meta Hackathon rules, `cli-bridge` is disclosed as a pre-existing external tool (built prior to kickoff and hosted as an external open-source dependency at [github.com/anshupriyan/cli-bridge](https://github.com/anshupriyan/cli-bridge)).  
+> **All code in this repository**—including the MemVision continuous perceptual memory engine (`memvison/`), the dual-model Meta Muse (Spark 1.3 / Wonder 1.0) ReAct orchestrator (`app/core/`), multi-modal screenshot grounding, and the glassmorphic desktop dashboard (`app/dashboard/`)—**was built entirely from scratch during the hackathon (Oct 26–29, 2026)**.
+
+
 ## Mythos & Concept
 
 Over **4,300 years ago**, in the ancient Sumerian city of Ur, **Enheduanna** became the **first recorded author in human history**. By pressing her stylus into wet clay and signing her work, she established the very concept of capturing conscious human experience into permanent, structured memory.
@@ -147,8 +153,10 @@ python main.py ui
 ```
 *Glassmorphic dashboard launches at `http://127.0.0.1:8765`.*
 
-### 2. Build The Operator (`cli-bridge`)
+### 2. Set Up The Operator (`cli-bridge` — External Dependency)
 ```bash
+# Clone and build the external execution bridge
+git clone https://github.com/anshupriyan/cli-bridge.git
 cd cli-bridge
 npm install
 npm run build
