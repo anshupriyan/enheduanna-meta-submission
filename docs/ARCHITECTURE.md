@@ -18,12 +18,13 @@ dangerous tools behind human approval. One process, port `127.0.0.1:4100`.
 
 ```mermaid
 flowchart LR
+    S["server.ts<br/>15 routes"]
     D["Dashboard"] -->|"POST /chat · GET /trace"| S
     I["IGI overlay"] -->|"POST /chat"| S
 
     subgraph CORE["Core · 127.0.0.1:4100"]
         direction LR
-        S["server.ts<br/>15 routes"] --> O["orchestrator.ts<br/>ReAct loop<br/>16 steps · 5 parallel"]
+        S --> O["orchestrator.ts<br/>ReAct loop<br/>16 steps · 5 parallel"]
         O --> P["meta.ts<br/>streaming"]
         O --> M["mcp/manager.ts<br/>24-tool union"]
 
@@ -32,14 +33,17 @@ flowchart LR
         O --> SES["session.ts<br/>JSON sessions"]
         O --> EV["evidence.ts<br/>timeline packer"]
         O --> TR["trace/bus<br/>100-ring + scrub"]
-        SUP["capture/supervisor.ts"]
+        S -->|"capture toggle"| SUP["capture/supervisor.ts"]
     end
 
     P -->|"HTTPS"| META["Meta Model API<br/>Spark + Wonder"]
-    M -->|"stdio MCP"| MV["memvision<br/>Python · 9 tools"]
+    M -->|"stdio MCP"| MV["memvision MCP server<br/>Python · 9 tools"]
     M -->|"stdio MCP"| CB["cli-bridge<br/>Node · 14 tools"]
-    SUP -->|"python main.py run"| MV
-    S --> SUP
+    SUP -->|"spawns"| CAP["memvision capture loop<br/>python main.py run"]
+    MV -.->|"reads"| DB[("SQLite + WebP")]
+    CAP -->|"writes"| DB
+
+    style CORE fill:transparent,stroke:#888,stroke-width:1px
 ```
 
 ## 2. The ReAct loop (`src/agent/orchestrator.ts`)
