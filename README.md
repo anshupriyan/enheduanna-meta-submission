@@ -81,10 +81,11 @@ Everything runs on your machine except the calls to the Meta Model API. **Core**
 ```mermaid
 flowchart LR
     D["Dashboard<br/>(served by Core)"] -->|"POST /chat · SSE"| C
-    I["IGI overlay<br/>Ctrl+Shift+Q"] -->|"POST /chat + crop + context"| C
+    I["IGI overlay<br/>Ctrl+Shift+Q"] -->|"POST /chat + crop"| C
     C["Core :4100<br/>agent loop · MCP hub · trace"]
-    C -->|"stdio MCP"| M["memvision"]
-    C -->|"stdio MCP"| B["cli-bridge"]
+    C <-->|"stdio MCP"| M["memvision"]
+    C <-->|"stdio MCP"| P{{"policy<br/>allow · ask · block"}}
+    P <--> B["cli-bridge"]
     C -->|"HTTPS · streaming"| A["Meta Model API<br/>Spark + Wonder"]
     M --> S[("SQLite FTS5<br/>+ WebP screenshots")]
     V["Capture monitor :8765"] -.->|reads| S
