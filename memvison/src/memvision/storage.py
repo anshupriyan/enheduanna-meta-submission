@@ -11,7 +11,7 @@ import os
 import re
 import sqlite3
 from dataclasses import asdict, dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse
@@ -194,6 +194,24 @@ class MemoryStorage:
             """)
             conn.execute("CREATE INDEX IF NOT EXISTS idx_episodes_time ON episodes(start_time DESC);")
             conn.execute("CREATE INDEX IF NOT EXISTS idx_episodes_app ON episodes(app_name);")
+
+            # Setup sessions_summary table for High-Level Synthesized Activity Summaries
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS sessions_summary (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    session_id INTEGER,
+                    start_time TEXT NOT NULL,
+                    end_time TEXT NOT NULL,
+                    duration_seconds INTEGER DEFAULT 0,
+                    title TEXT NOT NULL,
+                    purpose TEXT NOT NULL,
+                    main_apps TEXT NOT NULL,
+                    distractions TEXT,
+                    summary TEXT NOT NULL,
+                    created_at TEXT NOT NULL
+                );
+            """)
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_sessions_summary_time ON sessions_summary(start_time DESC);")
 
             # Migration: Ensure episode_id and file_path columns exist on captures table
             cursor = conn.execute("PRAGMA table_info(captures);")
@@ -958,3 +976,209 @@ class MemoryStorage:
             screenshot_path=row["screenshot_path"],
             summary_keywords=row["summary_keywords"] or "",
         )
+
+    def save_session_summary(
+        self,
+        start_time: str,
+        end_time: str,
+        duration_seconds: int,
+        title: str,
+        purpose: str,
+        main_apps: str,
+        distractions: str,
+        summary: str,
+        session_id: Optional[int] = None,
+    ) -> int:
+        """Saves a synthesized activity session summary."""
+        now = datetime.now(timezone.utc).isoformat()
+        with self.connection() as conn:
+            cursor = conn.execute(
+                """
+                INSERT INTO sessions_summary (
+                    session_id, start_time, end_time, duration_seconds,
+                    title, purpose, main_apps, distractions, summary, created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+                """,
+                (
+                    session_id,
+                    start_time,
+                    end_time,
+                    duration_seconds,
+                    title,
+                    purpose,
+                    main_apps,
+                    distractions,
+                    summary,
+                    now,
+                ),
+            )
+            conn.commit()
+            return cursor.lastrowid
+
+    def get_session_summaries(
+        self,
+        since: Optional[str] = None,
+        until: Optional[str] = None,
+        limit: int = 10,
+    ) -> List[Dict[str, Any]]:
+        """Retrieves synthesized activity session summaries ordered by start_time DESC."""
+        clauses = []
+        params = []
+        if since:
+            clauses.append("start_time >= ?")
+            params.append(since)
+        if until:
+            clauses.append("end_time <= ?")
+            params.append(until)
+
+        where = ("WHERE " + " AND ".join(clauses)) if clauses else ""
+        sql = f"SELECT * FROM sessions_summary {where} ORDER BY start_time DESC LIMIT ?;"
+        params.append(limit)
+
+        results = []
+        with self.connection() as conn:
+            for row in conn.execute(sql, params):
+                results.append(
+                    {
+                        "id": row["id"],
+                        "start_time": row["start_time"],
+                        "end_time": row["end_time"],
+                        "duration_minutes": round((row["duration_seconds"] or 0) / 60, 1),
+                        "duration_seconds": row["duration_seconds"] or 0,
+                        "title": row["title"],
+                        "purpose": row["purpose"],
+                        "main_apps": row["main_apps"],
+                        "distractions": row["distractions"],
+                        "summary": row["summary"],
+                    }
+                )
+        return results
+
+    def backfill_session_summaries(self, hours: int = 48) -> int:
+        """Clusters captures from the last N hours into activity sessions and writes synthesized summaries."""
+        cutoff = (datetime.now(timezone.utc) - timedelta(hours=hours)).isoformat()
+        with self.connection() as conn:
+            rows = conn.execute(
+                "SELECT id, app_name, window_title, url, timestamp FROM captures WHERE timestamp >= ? ORDER BY id ASC;",
+                (cutoff,),
+            ).fetchall()
+
+        if not rows:
+            return 0
+
+        # Cluster captures by idle gap > 5 minutes
+        sessions: List[List[sqlite3.Row]] = []
+        current_session: List[sqlite3.Row] = []
+
+        for row in rows:
+            if not current_session:
+                current_session.append(row)
+                continue
+
+            try:
+                prev_ts = datetime.fromisoformat(current_session[-1]["timestamp"].replace("Z", "+00:00"))
+                curr_ts = datetime.fromisoformat(row["timestamp"].replace("Z", "+00:00"))
+                gap_seconds = (curr_ts - prev_ts).total_seconds()
+            except Exception:
+                gap_seconds = 0
+
+            if gap_seconds > 300:  # 5 minutes idle gap
+                sessions.append(current_session)
+                current_session = [row]
+            else:
+                current_session.append(row)
+
+        if current_session:
+            sessions.append(current_session)
+
+        created = 0
+        for sess in sessions:
+            if not sess:
+                continue
+            start_ts = sess[0]["timestamp"]
+            end_ts = sess[-1]["timestamp"]
+            try:
+                t0 = datetime.fromisoformat(start_ts.replace("Z", "+00:00"))
+                t1 = datetime.fromisoformat(end_ts.replace("Z", "+00:00"))
+                duration_s = max(int((t1 - t0).total_seconds()), len(sess) * 2)
+            except Exception:
+                duration_s = len(sess) * 2
+
+            if duration_s < 10 and len(sess) < 2:
+                continue
+
+            # Check if this time range already has a summary
+            with self.connection() as conn:
+                existing = conn.execute(
+                    "SELECT id FROM sessions_summary WHERE start_time = ? AND end_time = ?;",
+                    (start_ts, end_ts),
+                ).fetchone()
+                if existing:
+                    continue
+
+            # Count apps and titles
+            app_counts: Dict[str, int] = {}
+            titles: List[str] = []
+            for r in sess:
+                a = r["app_name"] or "unknown"
+                app_counts[a] = app_counts.get(a, 0) + 1
+                if r["window_title"] and r["window_title"] not in titles:
+                    titles.append(r["window_title"])
+
+            sorted_apps = sorted(app_counts.items(), key=lambda x: x[1], reverse=True)
+            primary_app = sorted_apps[0][0] if sorted_apps else "Desktop"
+            main_apps = ", ".join([a[0] for a in sorted_apps[:3]])
+
+            # Infer purpose & distractions
+            lower_primary = primary_app.lower()
+            combined_titles = " ".join(titles).lower()
+
+            if any(k in lower_primary or k in combined_titles for k in ["antigravity", "code", "devenv", "python", "terminal", "powershell"]):
+                purpose = "Coding & Development"
+                title = f"Development Session in {primary_app}"
+                distractions = "None"
+                for a, count in sorted_apps[1:]:
+                    if any(d in a.lower() for d in ["discord", "youtube", "slack", "spotify"]):
+                        distractions = f"Brief glance at {a} ({count * 2}s)"
+                        break
+                mins = round(duration_s / 60, 1)
+                summary = f"Actively developed project code and ran tools in {primary_app} for {mins} minutes ({len(sess)} captures)."
+            elif any(k in combined_titles or k in lower_primary for k in ["youtube", "netflix", "trailer", "video", "twitch", "vlc"]):
+                purpose = "Video & Media"
+                title = titles[0][:50] if titles else f"Watching Media in {primary_app}"
+                distractions = "None"
+                mins = round(duration_s / 60, 1)
+                summary = f"Watched video playback ('{title}') for approximately {mins} minutes."
+            elif any(k in lower_primary or k in combined_titles for k in ["discord", "slack", "teams", "whatsapp"]):
+                purpose = "Communication & Messaging"
+                title = f"Messaging on {primary_app}"
+                distractions = "None"
+                mins = round(duration_s / 60, 1)
+                summary = f"Chatted and communicated using {primary_app} for {mins} minutes."
+            elif any(k in combined_titles for k in ["stackoverflow", "github", "docs", "google", "documentation"]):
+                purpose = "Research & Documentation"
+                title = f"Technical Research in {primary_app}"
+                distractions = "None"
+                mins = round(duration_s / 60, 1)
+                summary = f"Researched technical documentation and web references in {primary_app}."
+            else:
+                purpose = "General Project Work"
+                title = f"Work in {primary_app}"
+                distractions = "None"
+                mins = round(duration_s / 60, 1)
+                summary = f"Carried out project work using {main_apps} for {mins} minutes."
+
+            self.save_session_summary(
+                start_time=start_ts,
+                end_time=end_ts,
+                duration_seconds=duration_s,
+                title=title,
+                purpose=purpose,
+                main_apps=main_apps,
+                distractions=distractions,
+                summary=summary,
+            )
+            created += 1
+
+        logger.info("Backfilled %d activity session summaries.", created)
+        return created
