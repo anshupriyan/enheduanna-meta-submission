@@ -699,8 +699,12 @@
           continue; // Do not render synthetic internal injection as a fake "You" bubble
         }
 
-        if (isInternalTimeline) {
-          continue; // Do not render internal timeline prompt as a fake "You" bubble
+        const isInternalActionResults = text.startsWith("[ACTION & TOOL EXECUTION RESULTS]");
+        const isInternalActionsCompleted = text.startsWith("[ACTIONS COMPLETED]");
+        const isInternalSynthesisPrompt = text.includes("Instructions for Wonder Synthesis:") || text.includes("[NOTICE: STEP BUDGET REACHED");
+
+        if (isInternalTimeline || isInternalActionResults || isInternalActionsCompleted || isInternalSynthesisPrompt) {
+          continue; // Do not render internal timeline or synthesis prompts as a fake "You" bubble
         }
 
         if (currentTurnContent && (turnVisualRefs.length > 0 || turnOcrRefs.length > 0)) {

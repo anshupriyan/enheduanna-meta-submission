@@ -179,6 +179,11 @@ export class Orchestrator {
       }
     }
 
+    // If during final synthesis the model hallucinated tool calls, discard them and treat as terminal text
+    if (isSynthesis && turnOutput.toolCalls && turnOutput.toolCalls.length > 0) {
+      turnOutput.toolCalls = [];
+    }
+
     // 1. Terminal Response: Model provided a direct answer without tool calls
     if (!turnOutput.toolCalls || turnOutput.toolCalls.length === 0) {
       if (!isSynthesis && res && !context?.suppressTerminalDelta) {
@@ -711,6 +716,7 @@ export class Orchestrator {
       // 1. Two-Model Routing: when enabled and tools were run, Wonder 1.0 ALWAYS writes the final synthesized answer
       // 2. Loop Cap / Guard Fallback: if loop ended without a terminal answer, synthesize summary from retrieved evidence
       if ((enableTwoModel && allTurnToolResults.length > 0) || !finalAnswer) {
+        const isStepLimitHit = step >= maxSteps;
         if (allTurnToolResults.length > 0) {
           const actionResults = allTurnToolResults
             .filter(
@@ -733,9 +739,13 @@ export class Orchestrator {
 
           const evidenceText = evidenceSections.length > 0 ? evidenceSections.join("\n\n") : "[ACTIONS COMPLETED]";
 
+          const stepNotice = isStepLimitHit
+            ? "\n\n[NOTICE: STEP BUDGET REACHED - CONCLUDE THOUGHTS]\nYou have reached the step budget for tool execution. Do NOT attempt any further tool calls. Formulate your complete, final conclusion now based on all the evidence gathered so far."
+            : "";
+
           sessionStore.appendMessage(sessionId, {
             role: "user",
-            content: `${evidenceText}\n\nInstructions for Wonder Synthesis:
+            content: `${evidenceText}${stepNotice}\n\nInstructions for Wonder Synthesis:
 1. Provide a detailed, articulate, and well-structured answer following the system prompt rules.
 2. If file, workspace, or system actions were performed (such as copy_file, write_file, or command execution), explicitly confirm the exact files, destination paths, and actions completed.
 3. For file analysis or approach notes, provide the complete, comprehensive solutions, code snippets, and architectural approaches directly in your answer. Do NOT state that you will finish later or create it in a future step.
@@ -745,8 +755,8 @@ export class Orchestrator {
           });
         }
 
-        let synthesisStep = step + 1;
-        let currentSynthesisResult = await this.executeStep(
+        const synthesisStep = step + 1;
+        const currentSynthesisResult = await this.executeStep(
           sessionId,
           synthesisStep,
           maxSteps + 2,
@@ -755,36 +765,19 @@ export class Orchestrator {
           { isFinalSynthesis: true }
         );
 
-        // If synthesis requested follow-up tools (e.g. verification like list_directory),
-        // loop so the model can inspect verification results and conclude with the final answer!
-        while (
-          currentSynthesisResult.toolCalls &&
-          currentSynthesisResult.toolCalls.length > 0 &&
-          synthesisStep < maxSteps + 3
-        ) {
-          synthesisStep++;
-          currentSynthesisResult = await this.executeStep(
-            sessionId,
-            synthesisStep,
-            maxSteps + 3,
-            options,
-            res,
-            { isFinalSynthesis: true }
-          );
-        }
-
-        if (currentSynthesisResult.isTerminal && currentSynthesisResult.reply) {
+        if (currentSynthesisResult.reply) {
           finalAnswer = currentSynthesisResult.reply;
-        } else if (!finalAnswer && currentSynthesisResult.reply) {
-          finalAnswer = currentSynthesisResult.reply;
-        } else if (finalAnswer && !currentSynthesisResult.isTerminal && res) {
-          // If synthesis did not terminate with an articulate answer, ensure the earlier confirmed answer is streamed
+        } else if (finalAnswer && res) {
           res.write(`event: delta\ndata: ${JSON.stringify({ text: `\n\n${finalAnswer}` })}\n\n`);
         }
       }
 
       if (!finalAnswer) {
-        finalAnswer = "I've reviewed your request but couldn't retrieve any matching memory or actions.";
+        if (allTurnToolResults.length > 0) {
+          finalAnswer = `I reviewed the workspace and gathered findings across ${allTurnToolResults.length} tool calls, but reached the step limit before concluding. The files and structure have been inspected.`;
+        } else {
+          finalAnswer = "I've reviewed your request but couldn't retrieve any matching memory or actions.";
+        }
         if (res) {
           res.write(`event: delta\ndata: ${JSON.stringify({ text: finalAnswer })}\n\n`);
         }

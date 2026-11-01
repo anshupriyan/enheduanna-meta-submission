@@ -97,7 +97,7 @@ function Test-NodeIsBuilt($Dir) {
     $dist = Join-Path $Dir "dist"
     $build = Join-Path $Dir "build"
     $target = if (Test-Path $dist) { $dist } elseif (Test-Path $build) { $build } else { $null }
-    return ((Test-Path $modules) -and ($target -ne $null))
+    return ((Test-Path $modules) -and ($null -ne $target))
 }
 
 # -----------------------------------------------------------------------------

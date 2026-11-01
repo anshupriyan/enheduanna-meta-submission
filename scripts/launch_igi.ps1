@@ -24,7 +24,7 @@ Write-Host "   Interpreter: $PythonExe" -ForegroundColor Cyan
 Write-Host "==========================================================" -ForegroundColor DarkYellow
 
 # JIT Verification: Ensure PySide6 desktop HUD GUI package is installed
-$hasIgi = & $PythonExe -c "try: import PySide6; print('ok')`nexcept: print('fail')"
+$hasIgi = & $PythonExe -c "import PySide6; print('ok')" 2>$null
 if ($hasIgi -notmatch "ok") {
     Write-Host "`n  [IGI] First-time launch detected: PySide6 GUI package is required." -ForegroundColor Yellow
     Write-Host "  [IGI] Installing PySide6-Essentials for on-screen companion HUD..." -ForegroundColor Cyan

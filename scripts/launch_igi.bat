@@ -20,18 +20,18 @@ echo    Interpreter: %PYTHON_EXE%
 echo ==========================================================
 
 :: JIT Verification: Ensure PySide6 desktop HUD GUI package is installed
-"%PYTHON_EXE%" -c "try: import PySide6; print('ok')\nexcept: exit(1)" >nul 2>&1
-if %ERRORLEVEL% neq 0 (
+"%PYTHON_EXE%" -c "import PySide6" >nul 2>&1
+if errorlevel 1 (
     echo.
     echo  [IGI] First-time launch detected: PySide6 GUI package is required.
     echo  [IGI] Installing PySide6-Essentials for on-screen companion HUD...
     where uv >nul 2>&1
-    if %ERRORLEVEL% equ 0 (
+    if not errorlevel 1 (
         uv pip install --python "%PYTHON_EXE%" -r "%REPO_ROOT%\igi\requirements.txt"
     ) else (
         "%PYTHON_EXE%" -m pip install -r "%REPO_ROOT%\igi\requirements.txt"
     )
-    if %ERRORLEVEL% neq 0 (
+    if errorlevel 1 (
         echo.
         echo  [FAIL] Failed to install PySide6. Check your internet connection.
         pause
