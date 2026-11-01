@@ -590,7 +590,7 @@ class IgiHudWindow(QWidget):
         screen_to_analyze = live_screenshot or final_crop
         hud_geo = self.geometry()
 
-        # Everything heavy (WinRT OCR, Window Context, SAM 3.1 Grounding, Core Chat Turn) runs in worker thread!
+        # Everything heavy (WinRT OCR, Window Context, OCR Grounding, Core Chat Turn) runs in worker thread!
         def worker():
             try:
                 nonlocal prompt, final_ocr, final_title, final_proc, final_ctx
@@ -646,7 +646,7 @@ class IgiHudWindow(QWidget):
                 # 1. Email Reply Workflow via Hierarchical Grounding
                 if is_reply_workflow and self.sam_router and screen_to_analyze:
                     try:
-                        self.signals.status_updated.emit("Locating reply box (SAM 3.1)...")
+                        self.signals.status_updated.emit("Locating reply box...")
                         reply_matches = self.sam_router.ground_target(
                             screen_to_analyze, "reply section", region_hint="bottom", exclude_rect=hud_geo
                         )

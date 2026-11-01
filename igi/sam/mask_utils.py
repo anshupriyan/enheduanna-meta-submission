@@ -1,5 +1,5 @@
 """
-IGI (𒅆) — SAM Mask & Spatial Geometry Utilities
+IGI (𒅆) — Spatial Geometry Utilities
 Polygons, bounding boxes, alpha masks, and neon glowing contour rendering.
 """
 

@@ -147,12 +147,12 @@ class IgiCanvasOverlay(QWidget):
             self.hide()
 
     def _process_selection(self):
-        """Invoke SAM 2 geometric snapping, run OCR, and emit result to HUD."""
+        """Invoke geometric edge snapping, run OCR, and emit result to HUD."""
         if not self.desktop_screenshot or len(self.stroke_points) < 3:
             self.hide()
             return
 
-        # 1. Route to SAM 2 geometric snapping engine
+        # 1. Route to geometric edge snapping engine
         result = self.sam_router.route_gesture(self.desktop_screenshot, self.stroke_points)
         crop_img: Image.Image = result["crop"]
 
