@@ -1,239 +1,43 @@
 <div align="center">
 
-<img src="assets/enheduanna.gif" width="400" alt="Enheduanna" />
+# **ENHEDUANNA**
 
-```text
-+----------------------------------------------------------------------------+
-|                                                                            |
-|         ______      __              __                                     |
-|        / ____/___  / /_  ___  ____/ /_  ______ _____  ____  ____ _         |
-|       / __/ / __ \/ __ \/ _ \/ __  / / / / __ `/ __ \/ __ \/ __ `/         |
-|      / /___/ / / / / / /  __/ /_/ / /_/ / /_/ / / / / / / / /_/ /          |
-|     /_____/_/ /_/_/ /_/\___/\__,_/\__,_/\__,_/_/ /_/_/ /_/\__,_/           |
-|                                                                            |
-|        :::  EN - HE - DU - AN - NA  |  UR, SUMER (c. 2300 BCE)  :::        |
-|                                                                            |
-|        << THE WORLD'S FIRST AUTHOR REBORN AS AN AUTONOMOUS AGENT >>        |
-|============================================================================|
-|   ::  THE MEMORY SCRIBE               ::  THE CLI OPERATOR                 |
-|   -------------------------           -------------------------            |
-|   + Continuous WinRT OCR (Native)     + Sandboxed Terminal Bridge          |
-|   + Spatial Window Blackout Curtain   + Granular Policy Guardrails         |
-|   + Video & Animation Suppression     + Session Approvals & JIT            |
-|   + Incremental Draft Collapsing      + CWE-59 Symlink Hardening           |
-|   + SQLite FTS5 Episodic Memory       + Standardized MCP Server            |
-+----------------------------------------------------------------------------+
-```
-
-# ENHEDUANNA
-
-### *Autonomous Desktop Scribe & Tool Execution Framework for AI*
-
-[![Protocol MCP](https://img.shields.io/badge/PROTOCOL-MCP_2.0-6C5CE7?style=for-the-badge&logoColor=white)](https://modelcontextprotocol.io/)
-[![Hardware WinRT OCR](https://img.shields.io/badge/ENGINE-WINRT_OCR_100%25-0984E3?style=for-the-badge&logoColor=white)](https://learn.microsoft.com/en-us/uwp/api/windows.media.ocr)
-[![Zero-Leak Privacy](https://img.shields.io/badge/SECURITY-ZERO--LEAK_REDACTION-00B894?style=for-the-badge)](./memvison/src/memvision/privacy.py)
-[![Architecture Monorepo](https://img.shields.io/badge/STACK-PYTHON_%2B_NODE-2D3436?style=for-the-badge)](./)
-[![License MIT](https://img.shields.io/badge/LICENSE-MIT-E17055?style=for-the-badge)](./LICENSE)
-
----
-
-> *"The creator of the tablet has formed something which has never happened before.*  
-> *That which I have said to you in the dead of night, let the singer repeat at high noon."*  
-> — **Enheduanna**, High Priestess of Ur (*The Exaltation of Inanna*, c. 2300 BCE)
-
-[**Mythos**](#mythos--concept) • [**Architecture**](#dual-faculty-architecture) • [**Faculties**](#system-faculties) • [**Quick Start**](#quick-start) • [**Privacy & Stability**](#privacy--stability-guarantees) • [**Inference Setup**](#inference--model-integration)
+### *Knows the past, governs the present, guides the future*
 
 </div>
 
 ---
 
-> [!IMPORTANT]
-> **Hackathon Prior Work & External Tool Disclosure:**  
-> Per official Meta Hackathon rules, `cli-bridge` is disclosed as a pre-existing external tool (built prior to kickoff and hosted as an external open-source dependency at [github.com/anshupriyan/cli-bridge](https://github.com/anshupriyan/cli-bridge)).  
-> **All code in this repository**—including the MemVision continuous perceptual memory engine (`memvison/`), the dual-model Meta Muse (Spark 1.3 / Wonder 1.0) ReAct orchestrator (`app/core/`), multi-modal screenshot grounding, and the glassmorphic desktop dashboard (`app/dashboard/`)—**was built entirely from scratch during the hackathon (Oct 26–29, 2026)**.
+## The Problem
 
+In this digital world, the human mind interacts with devices constantly, and a significant portion of the data it processes arrives through the internet and screens: videos you watched, files you read, commands you ran. But the mind forgets, and details blur. A week later you can't remember which video it was, who made it, or where you saved the file. Tracking all of that by hand is a job in itself, and nobody does it.
 
-## Mythos & Concept
-
-Over **4,300 years ago**, in the ancient Sumerian city of Ur, **Enheduanna** became the **first recorded author in human history**. By pressing her stylus into wet clay and signing her work, she established the very concept of capturing conscious human experience into permanent, structured memory.
-
-Modern desktop AI agents operate with complete amnesia: they cannot perceive what you did minutes ago, and they cannot touch your operating system without risk of uncontrolled destruction.
-
-**Enheduanna** addresses both boundaries through a unified, modular architecture over the **Model Context Protocol (MCP)**:
-- **The Scribe (`memvison/`)**: Observes, redacts, extracts, and clusters desktop activity into a searchable, privacy-guarded episodic memory.
-- **The Operator (`cli-bridge/`)**: Provides the reasoning model with a policy-bounded, sandboxed execution bridge to run terminal commands, builds, and tools safely.
-- **The Eye (`igi/` 𒅆)**: Real-time on-screen perception, Circle-to-Search with Dual MoE SAM (SAM 2 local gesture snapping + SAM 3 cloud concept guidance), and an Obsidian & Amber companion HUD.
-
-### 4. Launch Enheduanna Integration Core & Dashboard
-The unified on-device integration layer orchestrates both MCP servers, connects to the Meta Model API (Muse Spark / Wonder) or Omniroute, and serves the localhost dashboard:
-
-```bash
-# Build and run the core service
-cd app/core
-npm install
-npm run build
-npm start
-```
-* Dashboard will launch at `http://127.0.0.1:4100/?token=<auth_token>`
-* Features multi-session chat, live SSE system traces, collapsible tool cards, and a 1-click OCR screen capture loop toggle.
+The AI we use every day has the same blind spot. It only knows what you tell it. Either you paste in the context yourself every time, or you have to work out which context it needs and feed it manually. The knowledge is scattered across your own activity, and the tools that could use it have no way to see it.
 
 ---
 
-## Dual-Faculty Architecture
+## Introducing Enheduanna
 
-```
-                       ┌─────────────────────────────────────┐
-                       │        LLM / Desktop Agent          │
-                       │     (Llama / Claude / Custom)       │
-                       └──────────────────┬──────────────────┘
-                                          │
-                   ┌──────────────────────┴──────────────────────┐
-                   │                                             │
-                   ▼ (Model Context Protocol)                    ▼ (Model Context Protocol)
-        ┌─────────────────────────────────────┐       ┌─────────────────────────────────────┐
-        │             memvison/               │       │            cli-bridge/              │
-        │        [THE MEMORY SCRIBE]          │       │         [THE CLI OPERATOR]          │
-        ├─────────────────────────────────────┤       ├─────────────────────────────────────┤
-        │ + Continuous Native WinRT OCR       │       │ + Policy-Engine (allow/ask/deny)    │
-        │ + Spatial Blackout Curtains         │       │ + Sandboxed Shell Execution         │
-        │ + Zero-Leak Regex Secret Scrubbing  │       │ + Interactive Session Approvals     │
-        │ + Video & Animation Suppression     │       │ + JIT Ephemeral Path Access Grants  │
-        │ + Incremental Draft Collapsing      │       │ + CWE-59 Symlink Escape Hardened    │
-        │ + Temporal Episode Clustering       │       │ + Audit Trail & Journal Logging     │
-        │ + SQLite WAL + FTS5 BM25 Search     │       │ + JSON-RPC 2.0 stdio MCP Server     │
-        └─────────────────────────────────────┘       └─────────────────────────────────────┘
-```
+Enheduanna is an on-device Desktop Intelligence that gives AI the context you already lived, so you don't have to reconstruct it by hand.
+
+Named after Enheduanna of Ur (c. 2300 BCE), the world's first known author, it does for your desktop what she did with clay tablets: it writes down what the mind would otherwise forget, in a form you can search and act on later.
+
+- **It remembers, with memvision.** What you watched, read and opened on screen is captured continuously and made searchable, even a week later. Ask which video you watched, who made it, or where you saved a file, and it answers in plain language.
+- **It acts, with [cli-bridge](https://github.com/anshupriyan/cli-bridge/tree/meta-hackathon).** It can find and read your files and run commands in the directories you allow, governed by a policy you control over both commands and directories. Anything allowed runs immediately, anything restricted is blocked, and anything unknown asks for your approval first. Every action is written to an audit log.
+- **It sees what you point at, with IGI.** IGI (Sumerian for "eye") is an on-screen overlay. Circle anything on your screen and ask about that exact thing, in context: an error, a button, a diagram. <sub>*Your rough circle is tightened to nearby UI boundaries with fast local edge detection and matched against on-device OCR, so the model sees a clean crop of what you meant — not a sloppy outline.*</sub>
+
+**Ask about anything you saw, then act on it.**
+
+**Private by design:** Your screen memory stays on your machine. When you ask a question, Enheduanna sends the model only what's relevant to it: your question, the matching memory snippets or files it retrieved, and screenshots only when they're needed, either of what you circled with IGI or a saved one from memory that helps answer a question about your past.
 
 ---
-
-## System Faculties
-
-| Faculty | Directory | Role | Core Innovations |
-| :--- | :--- | :--- | :--- |
-| **The Scribe** | [`memvison/`](./memvison) | **Perceptual Memory** | • **Spatial Masking:** Opaque blackout curtains over private windows in split-screen mode.<br>• **Zero-Leak Scrubbing:** Automatic regex redaction of API keys, tokens, and credentials.<br>• **Stability Gating:** Drops video playback frames with static webpage text.<br>• **Draft Collapse:** In-place accumulation of document writing (replaces 20 drafts with 1). |
-| **The Operator** | [`cli-bridge/`](./cli-bridge) | **Tool Execution** | • **Policy Engine:** Declarative JSON policy blocking destructive system actions.<br>• **Human-in-the-Loop:** Interactive session approval for sensitive CLI commands.<br>• **CWE-59 Hardened:** Defense against symlink breakout attacks.<br>• **Scoped Journals:** Granular per-project development journals and execution logs. |
-
----
-
-## Privacy & Stability Guarantees
 
 > [!NOTE]
-> **100% Local-First Operation**: Screenshots, OCR indexes, SQLite databases, and terminal actions **never leave your local machine**. There are no external cloud syncs, no telemetry beacons, and zero external subscriptions required.
-
-### 1. Spatial Window Masking (The "Blackout Curtain")
-When working side-by-side in split-screen mode, clicking an allowed app (e.g. VS Code) while a private app (e.g. Discord, 1Password) sits visible would normally photograph confidential chats. Enheduanna uses Win32 window enumeration to paint an opaque matte rectangle over restricted windows **before OCR runs**, ensuring **0 characters** are ever indexed.
-
-### 2. Zero-Leak Real-Time Secret Scrubbing
-An inline pre-persistence regex scanner intercepts all standard credentials before storage:
-- **API Keys**: OpenAI, Anthropic, OpenRouter, Google AI, AWS, HuggingFace, Slack.
-- **Tokens & Secrets**: Bearer authentication tokens, JWTs, private keys (`BEGIN PRIVATE KEY`).
-- **Retroactive Sanitizer**: Sweeps historical SQLite databases and FTS5 indexes to purge exposed tokens.
-
-### 3. Video & Animation Suppression
-Watching video streams (YouTube, Twitch, Netflix, VLC) normally floods memory with 1,000+ redundant frames per hour. Enheduanna evaluates OCR text stability across consecutive frames. If pixels change but the webpage text remains $\ge 90\%$ identical, **the frame is immediately dropped**—saving disk space and CPU.
-
-### 4. Incremental Draft Collapsing
-Typing a document or code normally produces dozens of fragmented snapshots (e.g. Paragraph 1, then Paragraphs 1 & 2). Enheduanna recognizes text expansion within a 60-second window, **updates the record in-place**, and **unlinks obsolete partial screenshots from disk**.
-
----
-
-## Quick Start
-
-### System Requirements
-- **Windows 10 / 11** (for hardware-accelerated WinRT OCR)
-- **Python 3.10+** (for `memvison`)
-- **Node.js v18+** (for `cli-bridge`)
-
-### 🚀 1-Click Automated Setup (Recommended)
-Run the root setup launcher (or double-click `setup.bat`):
-```cmd
-.\setup.bat
-```
-*(Alternatively via PowerShell: `powershell -ExecutionPolicy Bypass -File scripts\setup.ps1`)*
-
-**What this script handles automatically:**
-1. Clones the external `cli-bridge` dependency directly from branch `meta-hackathon` into `../cli-bridge` and compiles it.
-2. Creates the Python virtual environment (`memvison/.venv`) and installs all dependencies for both **MemVision** and **IGI**.
-3. Compiles the TypeScript backend and static dashboard (`app/core`).
-4. Generates a ready-to-run `enheduanna.config.json` with portable relative paths.
-
----
-
-### 🎮 Running the System
-
-#### 1. Set Your Meta API Key
-```powershell
-$env:META_API_KEY = "YOUR_API_KEY"
-```
-
-#### 2. Start Enheduanna Core & Web Dashboard
-```powershell
-cd app/core
-npm start
-```
-* **Dashboard:** [http://127.0.0.1:4100](http://127.0.0.1:4100) (Live ReAct traces, tool execution cards, multi-turn reasoning).
-
-#### 3. (Optional) Open MemVision Capture Monitoring Dashboard
-```powershell
-cd memvison
-.\.venv\Scripts\python.exe main.py ui
-```
-* **Dashboard:** [http://127.0.0.1:8765](http://127.0.0.1:8765) (Real-time timeline, OCR browsing, full image preview).
-
-#### 4. (Optional) Launch IGI Visual Companion HUD
-```cmd
-.\scripts\launch_igi.bat
-```
-* **HUD:** Activates the on-screen companion HUD with live WinRT screen context and Spark Spatial Planner.
-
----
-
-### Manual Setup (Step-by-Step Alternative)
-If you prefer running manual steps instead of the 1-click script:
-
-```bash
-# 1. Clone & build external cli-bridge on branch meta-hackathon
-git clone -b meta-hackathon https://github.com/anshupriyan/cli-bridge.git ../cli-bridge
-cd ../cli-bridge && npm install && npm run build && cd ../enheduanna-submission
-
-# 2. Setup Python environment
-cd memvison
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
-pip install -r ../igi/requirements.txt
-cd ..
-
-# 3. Setup Core
-cd app/core && npm install && npm run build
-```
-
----
-
-## Inference & Model Integration
-
-Enheduanna operates as a client-agnostic MCP bridge. It natively supports any modern LLM via standard JSON-RPC 2.0 tool definitions:
-
-- **Meta Llama 3.3 (70B Instruct)**: Optimized prompt templates and tool calling schemas.
-- **Anthropic Claude (3.5 Sonnet)**: Seamless integration via Claude Desktop MCP.
-- **Multi-Provider Fallback**: Built-in support for OpenAI, Groq, OpenRouter, DeepSeek, and local Ollama instances.
-
-For protocol specifications and API wire details, see:
-[`memvison/META_MODEL_API_REFERENCE.md`](./memvison/META_MODEL_API_REFERENCE.md)
-
----
-
-## Verification & Test Telemetry
-
-```bash
-# Run Scribe stability, privacy & OCR unit tests (10/10 passing in 0.26s)
-pytest memvison/tests/test_stability.py memvison/tests/test_privacy.py
-
-# Run Operator security & policy test suite
-cd cli-bridge && npm test
-```
-
----
-
-## License
-Released under the **MIT License**.
+> **Pre-existing work disclosure.** The only work here that predates this hackathon is **[cli-bridge](https://github.com/anshupriyan/cli-bridge)**, my TypeScript/Node.js MCP server that gives an AI controlled shell and file access to a machine.
+>
+> **cli-bridge is not part of this repository.** None of its code or history is included here. It is downloaded separately as an external dependency during setup, from the [`meta-hackathon` branch](https://github.com/anshupriyan/cli-bridge/tree/meta-hackathon).
+>
+> - **Before I applied:** cli-bridge was published and limited to a single sandboxed workspace root, with ripgrep search and a local audit log.
+> - **After I was selected, before the Oct 26 kickoff (Oct 23-24):** I added a policy mode so Enheduanna could work across the machine safely: multiple allowed directories, read-write or read-only access per directory, restricted directories, and restricted commands. Per the organizers, this counts as pre-existing work.
+>
+> **Every line of code in this repository was written after the kickoff.**
