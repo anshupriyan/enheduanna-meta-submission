@@ -248,3 +248,208 @@ sidebar, and a settings modal (provider, model, reasoning, key) persisted via
 2. **Dynamic Machine Timezone (Implemented).** `prompts/loader.ts` dynamically resolves the user's local timezone via `Intl.DateTimeFormat().resolvedOptions().timeZone`, ensuring relative-day queries ("yesterday") resolve against local clock boundaries.
 3. **Trace scrub is pattern-based.** The 7 regexes catch known credential shapes; unusual formats can slip through. Treat traces as sensitive.
 
+---
+
+## memvision: Continuous Screen Memory (`memvison/`)
+
+> **TL;DR:** A Python service that screenshots your desktop every ~2s while
+> recording is on, OCRs each visible window at native resolution with WinRT,
+> gates everything through a privacy engine (blocklist + 12 secret patterns +
+> blackout curtains), and stores it in SQLite + FTS5 with WebP crops, exposed
+> as 9 MCP tools plus a timeline monitor on `:8765`.
+> The folder is spelled `memvison/` in the repo; read it as "memvision".
+> Verified against commit `37857c8`.
+
+> Stack: Python 3.10+, `mss`, WinRT OCR, SQLite WAL + FTS5, stdlib HTTP.
+> Entry: `python main.py run` (capture) · `python main.py mcp` (MCP server) ·
+> `python main.py ui` (monitor on `:8765`).
+
+### 1. What it does
+
+memvision is the memory layer, continuous while recording is on. Every tick it
+grabs the screen, enumerates visible windows in Z-order, blanks occluded
+pixels, OCRs each window separately, scrubs secrets, and persists captures,
+window records and episodes. Core queries it over MCP, and you can browse it
+on `:8765`.
+
+```mermaid
+flowchart LR
+    SCREEN["Desktop screen"]
+    CORE["Enheduanna Core :4100"]
+    BROWSER["Browser :8765"]
+
+    subgraph MEM["memvision (memvison/)"]
+        CAP["Capture loop<br/>python main.py run"]
+        MCP["MCP server<br/>python main.py mcp"]
+        UI["Monitor<br/>python main.py ui"]
+        DB[("SQLite memvision.db<br/>captures + windows + episodes + FTS5")]
+        DISK["WebP crops<br/>data/screenshots/"]
+    end
+
+    SCREEN -->|"screenshot ~2s"| CAP
+    CAP -->|"writes captures / windows / episodes"| DB
+    CAP -->|"writes crops"| DISK
+    CORE -->|"stdio tools/call"| MCP
+    MCP -->|"reads search / recent / details"| DB
+    MCP -->|"reads crop files"| DISK
+    BROWSER -->|"HTTP"| UI
+    UI -->|"reads stats / search / captures"| DB
+    UI -->|"reads screenshot files"| DISK
+
+    style MEM fill:transparent,stroke:#888,stroke-width:1px
+```
+
+### 2. The capture tick (`src/memvision/engine.py`)
+
+`capture_once()` runs 9 stages per tick (default interval 1.0s in config,
+2.0s when spawned by Core's supervisor):
+
+1. **Grab**: full native-resolution frame via `mss` on a dedicated
+   WinSta0-attached worker thread (`capture.py`), with `ImageGrab` fallback.
+2. **Context**: foreground window + visible top-level windows in Z-order via
+   Win32 enumeration + UIA (`context.py`): app, title, URL (browsers), IDE
+   file path, rects, PIDs.
+3. **Privacy gate (windows)**: `filter_blocked_windows()` finds violating
+   windows; `redact_blocked_windows()` paints opaque charcoal curtains over
+   them *before* OCR, so their text is never read. If the active window is
+   blocked but covers < 85% of the screen and an allowed window is visible,
+   the tick is "spatially rescued" onto the topmost allowed window instead of
+   dropped.
+4. **Change gate**: 64-bit dhash Hamming distance must exceed 3, else the
+   tick returns early (cursor blinks and antialiasing ignored).
+5. **Occlusion + per-window OCR**: each window ≥ 10px with ≥ 5% visible
+   fraction gets occluded pixels blanked to neutral gray, is tight-cropped to
+   its visible bbox, and OCR'd at native resolution with WinRT line/word
+   boxes offset back to window coordinates. Per-window privacy re-check:
+   `drop` skips, `redact` blurs the crop (radius 20) and replaces text.
+6. **Dedupe**: each window's OCR is SHA-256 hashed (16 hex); crops (≤1600px,
+   WebP-75) are saved only for foreground / changed / forced windows,
+   otherwise the previous crop path is reused.
+7. **Sanitize**: title + URL pass through `redact_text` / `redact_url`;
+   counts and matched rules accumulate into capture metadata.
+8. **Video suppression**: same app+title as last save: if OCR similarity ≥
+   0.90 (or containment ≥ 0.95 with < 20 chars delta), or both empty
+   (fullscreen video with hidden controls), the frame is dropped. Draft
+   expansion (longer text, containment ≥ 0.85) is detected but currently only
+   gates suppression, not in-place collapse.
+9. **Persist**: `CaptureRecord` + linked `WindowRecord`s saved, episode
+   clustered, screenshots pruned (500MB / 7 days), step callbacks fired.
+
+No full-screen image is stored in the normal path. `screenshot_path` points
+at the foreground window's crop (or first available crop).
+
+### 3. Privacy engine (`src/memvision/privacy.py`)
+
+Three independent mechanisms, all pre-persistence:
+
+| Mechanism | What it does |
+|---|---|
+| Window rules | Blocklist (default) or allowlist mode over app / title / URL, fnmatch + regex, hot-reloaded on file mtime. Verdicts: `pass` / `drop` (skip tick) / `redact` (store `[REDACTED]` marker). |
+| Text scrub | 12 built-in regex families over OCR + titles: `sk-`/`sk-or-v1`/`sk-ant-`, `ghp_*`, `AIza`, `AKIA*`, `hf_`, `xox*-`, `Bearer`, key/secret/password assignments, JWTs, private-key blocks, URL query secrets, doc-hash fragments. Custom patterns merge from `config/privacy_rules.json`. |
+| URL scrub | Query allowlist (q, v, scope, ...) vs denylist (state, code, token, secret, ...) + long hex/b64 values ≥ 32 chars, fragment pairs, `/viewer/<20+>` path hashes, then regex defense-in-depth. |
+
+Plus `sanitize_database()`: a retroactive sweep that re-runs the gate over
+every stored row (purging blocked-title OCR entirely) and lets FTS triggers
+re-index. `get_window_crop` / `get_screenshot` re-evaluate privacy at serve
+time and blur violating crops (radius 25).
+
+### 4. OCR (`src/memvision/ocr.py`)
+
+Primary: Windows native WinRT `OcrEngine` from user-profile languages,
+hardware-accelerated, 100% offline, zero network bytes. PIL → BMP bytes →
+`InMemoryRandomAccessStream` → `BitmapDecoder` → `SoftwareBitmap` →
+`recognize_async`, returning full text plus line/word bounding boxes.
+Fallback: `pytesseract` (plain + `image_to_data` lines). If OCR is disabled,
+all text paths return empty.
+
+### 5. Storage (`src/memvision/storage.py`)
+
+SQLite with WAL + `NORMAL` sync + FK on, 10s busy timeout. Four tables:
+
+| Table | One row per… | Key columns |
+|---|---|---|
+| `captures` | Saved tick | timestamp, app, title, URL, aggregated OCR, crop path, phash, dims, `is_redacted`, metadata JSON, `episode_id`, `file_path` |
+| `windows` | Visible window in a tick | `capture_id` (CASCADE), hwnd, app, pid, title, URL, rect, z, foreground, monitor, visible fraction, OCR + line boxes JSON, text hash, crop path |
+| `episodes` | Focus session | app, title, URL, start/end, duration, capture count, key capture, keywords |
+| `sessions_summary` | Synthesized session | start/end, duration, title, purpose, main apps, distractions, summary |
+
+**FTS5:** `captures_fts` + `windows_fts` virtual tables over
+(app, title, URL, OCR), kept in sync by 6 triggers (insert/delete/update
+each). `search()` uses `MATCH "phrase"` + time/app/file filters with
+`ORDER BY rank`; phrase-breaking queries and FTS failures fall back to a
+5-column `LIKE` query. Empty queries run a direct indexed query (no FTS).
+
+**Episodes:** `cluster_or_create_episode()` extends the latest episode when
+the app matches (case-insensitive) and the gap is ≤ 180s, merging title/URL
+keywords (dedup'd, title words ≥ 3 chars capped at 8 + domain); otherwise a
+new episode starts. Upgrades auto-backfill unclustered captures.
+
+**Retention:** database rows are kept. `_prune_screenshots()` enforces
+500MB / 7-day caps on WebP/JPG files every tick, so text search keeps working
+after a screenshot is pruned but the image is gone.
+
+### 6. MCP server (`src/memvision/mcp_server.py`)
+
+JSON-RPC 2.0 over stdio (`initialize` → `tools/list` → `tools/call`), logging
+to stderr only. DB/screenshot paths overridable via `MEMVISION_DB_PATH` /
+`MEMVISION_SCREENSHOTS_DIR`. The 9 tools:
+
+| Tool | Purpose |
+|---|---|
+| `search_desktop_memory` | FTS5 search over OCR/titles/URLs/apps + since/until/app/file filters; returns per-hit matching window (query hit → foreground → first) with rects + snippets |
+| `get_recent_memory` | Latest captures, newest first |
+| `get_capture_details` | Full OCR + URL + metadata + window list for one capture |
+| `get_memory_statistics` | Counts, redacted count, time range, DB size |
+| `get_activity_sessions` | Episodes with durations + capture counts |
+| `get_capture_windows` | Z-ordered windows for a capture (rects, fractions, snippets) |
+| `get_window_crop` | Window crop as MCP `image` (WebP-75, ≤1024px), privacy-blurred if needed; `window_id: 0` = full frame |
+| `get_screenshot` | Full-frame image (≤1280px), same pipeline |
+| `get_session_summaries` | Synthesized sessions (auto-backfills 48h if empty) |
+
+Image tools resolve `crop_path` → screenshots dir. Once a screenshot has been
+pruned, `get_window_crop` and `get_screenshot` return an error instead of an
+image. The crop-from-full-frame fallback (via `virtual_origin`) only applies
+to rows that stored a full frame, which the normal path does not.
+
+### 7. Monitor + CLI (`web_server.py`, `main.py`)
+
+`python main.py ui` serves a zero-dependency stdlib `ThreadingHTTPServer` on
+`127.0.0.1:8765`: glassmorphic timeline + `GET /api/stats|/sessions|/recent|
+/search|/capture/:id|/screenshot/:id` and `POST /api/chat` (standalone RAG
+via `ai_chat.py`, separate from Core's agent). The server sends no
+`Access-Control-Allow-Origin` header and rejects requests whose `Host` header
+is not a loopback address, which blocks DNS rebinding. The chat helper uses
+`META_API_KEY` only; with no key it falls back to a local search summary and
+makes no network call. CLI: `run` (loop), `once -f`, `search`, `chat`, `mcp`,
+`ui`, `sessions`, `stats`, `privacy-test`, `sanitize`, `open`, `latest`.
+
+### 8. File map
+
+| File | Role |
+|---|---|
+| `main.py` | 12-command CLI (run/once/search/chat/mcp/ui/...) |
+| `src/memvision/engine.py` | 9-stage capture tick, video suppression, prune |
+| `src/memvision/capture.py` | WinSta0 worker + mss grab, blackout curtains, WebP save |
+| `src/memvision/change_detector.py` | dhash/phash/ahash, threshold 3, stats |
+| `src/memvision/context.py` | Win32 Z-order + UIA (URL, IDE paths), DPI awareness |
+| `src/memvision/ocr.py` | WinRT primary + tesseract fallback, line/word boxes |
+| `src/memvision/privacy.py` | Block/allow rules, 12-pattern scrub, URL sanitize, retro sweep |
+| `src/memvision/storage.py` | WAL SQLite, FTS5 + 6 triggers, episodes, screenshot prune |
+| `src/memvision/mcp_server.py` | 9-tool stdio JSON-RPC server |
+| `src/memvision/web_server.py` | stdlib monitor on `:8765` + 7 REST endpoints, loopback Host check |
+| `src/memvision/ai_chat.py` | Standalone Meta-only RAG for the monitor, local fallback with no key |
+| `src/memvision/config.py` | Dataclass config (1.0s, dhash-3, WebP, 0.90, 60s) |
+| `tests/` | 11 suites (privacy, stability, storage, MCP, capture, ...) |
+
+### 9. Known limits
+
+1. **Windows only.** WinRT OCR, WinSta0 capture and Win32/UIA context need
+   Windows 10/11 and Python 3.10+ in an interactive desktop session.
+2. **Screenshot retention gap.** Screenshots are pruned at 500MB / 7 days
+   while database rows are kept. After pruning, image tools return an error;
+   OCR search still works.
+3. **Draft expansion.** Detected (longer text, containment ≥ 0.85) but only
+   gates video suppression. There is no in-place record collapse yet.
+4. **Pattern-based scrubbing.** The 12 regex families catch known credential
+   shapes, and unusual formats can slip through.
+
