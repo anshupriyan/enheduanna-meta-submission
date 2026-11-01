@@ -144,44 +144,68 @@ Typing a document or code normally produces dozens of fragmented snapshots (e.g.
 - **Python 3.10+** (for `memvison`)
 - **Node.js v18+** (for `cli-bridge`)
 
-### 1. Launch The Scribe (`memvison`)
+### 🚀 1-Click Automated Setup (Recommended)
+Run the root setup launcher (or double-click `setup.bat`):
+```cmd
+.\setup.bat
+```
+*(Alternatively via PowerShell: `powershell -ExecutionPolicy Bypass -File scripts\setup.ps1`)*
+
+**What this script handles automatically:**
+1. Clones the external `cli-bridge` dependency directly from branch `meta-hackathon` into `../cli-bridge` and compiles it.
+2. Creates the Python virtual environment (`memvison/.venv`) and installs all dependencies for both **MemVision** and **IGI**.
+3. Compiles the TypeScript backend and static dashboard (`app/core`).
+4. Generates a ready-to-run `enheduanna.config.json` with portable relative paths.
+
+---
+
+### 🎮 Running the System
+
+#### 1. Set Your Meta API Key
+```powershell
+$env:META_API_KEY = "YOUR_API_KEY"
+```
+
+#### 2. Start Enheduanna Core & Web Dashboard
+```powershell
+cd app/core
+npm start
+```
+* **Dashboard:** [http://127.0.0.1:4100](http://127.0.0.1:4100) (Live ReAct traces, tool execution cards, multi-turn reasoning).
+
+#### 3. (Optional) Open MemVision Capture Monitoring Dashboard
+```powershell
+cd memvison
+.\.venv\Scripts\python.exe main.py ui
+```
+* **Dashboard:** [http://127.0.0.1:8765](http://127.0.0.1:8765) (Real-time timeline, OCR browsing, full image preview).
+
+#### 4. (Optional) Launch IGI Visual Companion HUD
+```cmd
+.\scripts\launch_igi.bat
+```
+* **HUD:** Activates the on-screen companion HUD with live WinRT screen context and Spark Spatial Planner.
+
+---
+
+### Manual Setup (Step-by-Step Alternative)
+If you prefer running manual steps instead of the 1-click script:
+
 ```bash
+# 1. Clone & build external cli-bridge on branch meta-hackathon
+git clone -b meta-hackathon https://github.com/anshupriyan/cli-bridge.git ../cli-bridge
+cd ../cli-bridge && npm install && npm run build && cd ../enheduanna-submission
+
+# 2. Setup Python environment
 cd memvison
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
-python main.py ui
-```
-*Glassmorphic dashboard launches at `http://127.0.0.1:8765`.*
+pip install -r ../igi/requirements.txt
+cd ..
 
-### 2. Set Up The Operator (`cli-bridge` — External Dependency)
-```bash
-# Clone and build the external execution bridge
-git clone https://github.com/anshupriyan/cli-bridge.git
-cd cli-bridge
-npm install
-npm run build
-```
-
-### 3. Register with MCP Clients (Claude Desktop / Cursor)
-Add both engines to your configuration file (e.g. `%APPDATA%\Claude\claude_desktop_config.json`):
-```json
-{
-  "mcpServers": {
-    "enheduanna-scribe": {
-      "command": "<REPO_ROOT>/memvison/.venv/Scripts/python.exe",
-      "args": ["<REPO_ROOT>/memvison/src/memvision/mcp_server.py"]
-    },
-    "enheduanna-operator": {
-      "command": "node",
-      "args": [
-        "<REPO_ROOT>/cli-bridge/build/index.js",
-        "--policy",
-        "<REPO_ROOT>/cli-bridge/policy.json"
-      ]
-    }
-  }
-}
+# 3. Setup Core
+cd app/core && npm install && npm run build
 ```
 
 ---
