@@ -78,22 +78,16 @@ Set your key in `META_API_KEY` (PowerShell or `.env`), in `enheduanna.config.jso
 
 Everything runs on your machine except the calls to the Meta Model API. **Core** is the hub: the dashboard and IGI talk to it, and it talks to memory, actions and the models.
 
-```text
-  Browser dashboard ──┐   (UI served by Core)
-  chat, trace, approvals │
-                         ├─ POST /chat (HTTP + SSE) ─► Core (:4100)
-  IGI overlay ───────────┘   + crop + window context    server + agent loop
-  (Ctrl+Shift+Q)                                         MCP hub + trace
-                                                           │
-                                                           ├─ stdio MCP ─► memvision ─► SQLite (FTS5)
-                                                           │                            + WebP screenshots
-                                                           │                            (local disk)
-                                                           ├─ stdio MCP ─► cli-bridge
-                                                           │
-                                                           └─ HTTPS ─────► Meta Model API
-                                                                            (Spark + Wonder)
-
-  memvision capture monitor (:8765) ── reads ──► SQLite  (timeline viewer, separate process)
+```mermaid
+flowchart LR
+    D["Dashboard<br/>(served by Core)"] -->|"POST /chat · SSE"| C
+    I["IGI overlay<br/>Ctrl+Shift+Q"] -->|"POST /chat + crop + context"| C
+    C["Core :4100<br/>agent loop · MCP hub · trace"]
+    C -->|"stdio MCP"| M["memvision"]
+    C -->|"stdio MCP"| B["cli-bridge"]
+    C -->|"HTTPS · streaming"| A["Meta Model API<br/>Spark + Wonder"]
+    M --> S[("SQLite FTS5<br/>+ WebP screenshots")]
+    V["Capture monitor :8765"] -.->|reads| S
 ```
 
 | Arrow | What travels |
