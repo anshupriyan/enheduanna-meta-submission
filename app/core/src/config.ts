@@ -86,15 +86,15 @@ const DEFAULT_CONFIG: AppConfig = {
 
 export function resolveMemvisionRoot(): string {
   const candidates = [
-    path.resolve(REPO_ROOT, "..", "memvison"),
     path.resolve(REPO_ROOT, "memvison"),
+    path.resolve(REPO_ROOT, "..", "memvison"),
   ];
   for (const c of candidates) {
     if (fs.existsSync(path.join(c, "data", "memvision.db")) || fs.existsSync(path.join(c, "main.py"))) {
       return c;
     }
   }
-  return path.resolve(REPO_ROOT, "..", "memvison");
+  return path.resolve(REPO_ROOT, "memvison");
 }
 
 export function resolveMemvisionDbPath(): string {

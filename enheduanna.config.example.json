@@ -25,16 +25,23 @@
   "mcpServers": {
     "memvision": {
       "command": "memvison/.venv/Scripts/python.exe",
-      "args": ["main.py", "mcp"],
+      "args": [
+        "main.py",
+        "mcp"
+      ],
       "cwd": "memvison",
       "env": {
-        "MEMVISION_DB_PATH": "./memvison/data/memvision.db",
-        "MEMVISION_SCREENSHOTS_DIR": "./memvison/data/screenshots"
+        "MEMVISION_DB_PATH": "data/memvision.db",
+        "MEMVISION_SCREENSHOTS_DIR": "data/screenshots"
       }
     },
     "cli-bridge": {
       "command": "node",
-      "args": ["build/index.js", "--policy", "policy.json"],
+      "args": [
+        "build/index.js",
+        "--policy",
+        "policy.json"
+      ],
       "cwd": "../cli-bridge",
       "env": {
         "WORKSPACE_ROOT": "."

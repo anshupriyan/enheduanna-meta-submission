@@ -1,5 +1,6 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import fs from "node:fs";
 import path from "node:path";
 import {
   getRepoRoot,
@@ -89,10 +90,42 @@ export class McpManager {
         ? (path.isAbsolute(configuredCwd) ? configuredCwd : path.resolve(repoRoot, configuredCwd))
         : resolveMemvisionRoot();
 
+      let resolvedDb = resolveMemvisionDbPath();
+      const rawDb = this.config.mcpServers.memvision.env?.MEMVISION_DB_PATH;
+      if (rawDb) {
+        if (path.isAbsolute(rawDb) && fs.existsSync(rawDb)) {
+          resolvedDb = rawDb;
+        } else if (!path.isAbsolute(rawDb)) {
+          const inMemCwd = path.resolve(memCwd, rawDb);
+          const inRepo = path.resolve(repoRoot, rawDb);
+          if (fs.existsSync(inMemCwd)) {
+            resolvedDb = inMemCwd;
+          } else if (fs.existsSync(inRepo)) {
+            resolvedDb = inRepo;
+          }
+        }
+      }
+
+      let resolvedScreenshots = resolveMemvisionScreenshotsDir();
+      const rawScreenshots = this.config.mcpServers.memvision.env?.MEMVISION_SCREENSHOTS_DIR;
+      if (rawScreenshots) {
+        if (path.isAbsolute(rawScreenshots) && fs.existsSync(rawScreenshots)) {
+          resolvedScreenshots = rawScreenshots;
+        } else if (!path.isAbsolute(rawScreenshots)) {
+          const inMemCwd = path.resolve(memCwd, rawScreenshots);
+          const inRepo = path.resolve(repoRoot, rawScreenshots);
+          if (fs.existsSync(inMemCwd)) {
+            resolvedScreenshots = inMemCwd;
+          } else if (fs.existsSync(inRepo)) {
+            resolvedScreenshots = inRepo;
+          }
+        }
+      }
+
       const memvisionEnv: Record<string, string> = {
-        MEMVISION_DB_PATH: resolveMemvisionDbPath(),
-        MEMVISION_SCREENSHOTS_DIR: resolveMemvisionScreenshotsDir(),
         ...(this.config.mcpServers.memvision.env || {}),
+        MEMVISION_DB_PATH: resolvedDb,
+        MEMVISION_SCREENSHOTS_DIR: resolvedScreenshots,
       };
 
       this.memTransport = new StdioClientTransport({
@@ -138,15 +171,28 @@ export class McpManager {
 
     // 2. Connect to cli-bridge
     try {
-      const cliCwd = path.isAbsolute(this.config.mcpServers["cli-bridge"].cwd)
+      let cliCwd = path.isAbsolute(this.config.mcpServers["cli-bridge"].cwd)
         ? this.config.mcpServers["cli-bridge"].cwd
         : path.join(repoRoot, this.config.mcpServers["cli-bridge"].cwd);
+
+      if (!fs.existsSync(cliCwd)) {
+        const local = path.resolve(repoRoot, "cli-bridge");
+        const sibling = path.resolve(repoRoot, "..", "cli-bridge");
+        if (fs.existsSync(local)) cliCwd = local;
+        else if (fs.existsSync(sibling)) cliCwd = sibling;
+      }
+
+      let workspaceRoot = repoRoot;
+      if (this.config.mcpServers["cli-bridge"].env?.WORKSPACE_ROOT) {
+        const rawWs = this.config.mcpServers["cli-bridge"].env.WORKSPACE_ROOT;
+        workspaceRoot = path.isAbsolute(rawWs) ? rawWs : path.resolve(repoRoot, rawWs);
+      }
 
       this.cliTransport = new StdioClientTransport({
         command: this.config.mcpServers["cli-bridge"].command,
         args: this.config.mcpServers["cli-bridge"].args,
         cwd: cliCwd,
-        env: this.getCleanEnv(this.config.mcpServers["cli-bridge"].env),
+        env: this.getCleanEnv({ ...(this.config.mcpServers["cli-bridge"].env || {}), WORKSPACE_ROOT: workspaceRoot }),
       });
 
       this.cliClient = new Client({ name: "enheduanna-core", version: "1.0.0" }, { capabilities: {} });
