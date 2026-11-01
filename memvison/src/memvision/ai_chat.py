@@ -44,75 +44,18 @@ class AIChatEngine:
 
     def get_api_credentials(self) -> Dict[str, str]:
         """
-        Intelligently resolves API Key, Base URL, and Model from environment.
-        Auto-configures the correct endpoint based on whichever API key is present:
-        Meta, OpenAI, Groq, OpenRouter, DeepSeek, Gemini, or Ollama.
+        Resolves Meta Model API credentials from environment.
+        Restricted to META_API_KEY only to prevent accidental routing to third-party providers.
         """
         api_cfg = self.config.ai
 
-        # 1. Detect provider from environment keys
-        api_key = ""
-        base_url = ""
-        model = ""
+        # Restrict strictly to Meta Model API key
+        api_key = os.environ.get("META_API_KEY") or os.environ.get(api_cfg.api_key_env, "")
+        base_url = api_cfg.base_url
+        model = api_cfg.model
         provider_detected = "meta"
 
-        if os.environ.get("ANTHROPIC_BASE_URL") or os.environ.get("ANTHROPIC_AUTH_TOKEN"):
-            api_key = os.environ.get("ANTHROPIC_AUTH_TOKEN") or os.environ.get("ANTHROPIC_API_KEY", "")
-            base_url = (os.environ.get("ANTHROPIC_BASE_URL") or "http://localhost:20128").rstrip("/")
-            if not base_url.endswith("/v1"):
-                base_url = f"{base_url}/v1"
-            model = os.environ.get("ANTHROPIC_MODEL") or "free-stack"
-            provider_detected = "omniroute"
-        elif os.environ.get("OPENAI_API_KEY"):
-            api_key = os.environ["OPENAI_API_KEY"]
-            base_url = "https://api.openai.com/v1"
-            model = "gpt-4o-mini"
-            provider_detected = "openai"
-        elif os.environ.get("GROQ_API_KEY"):
-            api_key = os.environ["GROQ_API_KEY"]
-            base_url = "https://api.groq.com/openai/v1"
-            model = "llama-3.3-70b-versatile"
-            provider_detected = "groq"
-        elif (
-            os.environ.get("OPENROUTER_API_KEY")
-            or os.environ.get("OMNIROUTE_API_KEY")
-            or os.environ.get("OMNI_ROUTE_API_KEY")
-        ):
-            api_key = (
-                os.environ.get("OPENROUTER_API_KEY")
-                or os.environ.get("OMNIROUTE_API_KEY")
-                or os.environ.get("OMNI_ROUTE_API_KEY")
-                or ""
-            )
-            base_url = "https://openrouter.ai/api/v1"
-            model = "meta-llama/llama-3.3-70b-instruct"
-            provider_detected = "openrouter"
-        elif os.environ.get("DEEPSEEK_API_KEY"):
-            api_key = os.environ["DEEPSEEK_API_KEY"]
-            base_url = "https://api.deepseek.com/v1"
-            model = "deepseek-chat"
-            provider_detected = "deepseek"
-        elif os.environ.get("GEMINI_API_KEY"):
-            api_key = os.environ["GEMINI_API_KEY"]
-            base_url = "https://generativelanguage.googleapis.com/v1beta/openai"
-            model = "gemini-2.0-flash"
-            provider_detected = "gemini"
-        elif os.environ.get("META_API_KEY") or os.environ.get(api_cfg.api_key_env):
-            api_key = os.environ.get("META_API_KEY") or os.environ.get(api_cfg.api_key_env, "")
-            base_url = api_cfg.base_url
-            model = api_cfg.model
-            provider_detected = "meta"
-        elif os.environ.get("LLM_API_KEY"):
-            api_key = os.environ["LLM_API_KEY"]
-            base_url = api_cfg.base_url
-            model = api_cfg.model
-            provider_detected = "custom"
-        else:
-            # Default / fallback settings
-            base_url = api_cfg.base_url
-            model = api_cfg.model
-
-        # Overrides from explicit environment variables
+        # Overrides from explicit environment variables if set
         if os.environ.get("LLM_BASE_URL"):
             base_url = os.environ["LLM_BASE_URL"]
         if os.environ.get("LLM_MODEL"):
@@ -370,7 +313,7 @@ class AIChatEngine:
                 )
             else:
                 summary_lines = [
-                    f"Found **{len(citations)}** relevant screen memories. *(Set `$env:META_API_KEY` or `$env:OPENAI_API_KEY` to enable AI conversational answers)*:\n"
+                    f"Found **{len(citations)}** relevant screen memories. *(Set `$env:META_API_KEY` to enable AI conversational answers)*:\n"
                 ]
                 for i, r in enumerate(citations, 1):
                     url_str = f" - [{r.url}]({r.url})" if r.url else ""

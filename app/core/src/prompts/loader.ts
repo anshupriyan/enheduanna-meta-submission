@@ -2,7 +2,13 @@ import fs from "node:fs";
 import path from "node:path";
 import { getRepoRoot } from "../config.js";
 
-const DEFAULT_TIMEZONE = "Asia/Kolkata";
+const DEFAULT_TIMEZONE = (() => {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+  } catch {
+    return "UTC";
+  }
+})();
 
 export function getSystemPrompt(userTimezone: string = DEFAULT_TIMEZONE): string {
   const repoRoot = getRepoRoot();

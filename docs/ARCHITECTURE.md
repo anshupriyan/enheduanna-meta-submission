@@ -242,19 +242,9 @@ sidebar, and a settings modal (provider, model, reasoning, key) persisted via
 | `test/` | 6 suites (`node --test`), incl. orchestrator loop guards |
 | `eval/quality_eval.js` | 10-question quality harness |
 
-## 14. Known limits
+## 14. Known limits & Security Controls
 
-1. **No auth + CORS `*`.** Core accepts any localhost request and answers
-   cross-origin. A malicious website open in your browser could read
-   `GET /api/approvals` and `POST /api/approvals/:id` to approve a pending
-   shell command, or `POST /api/config`. Mitigation planned: reject requests
-   whose `Origin` is present and not `http://127.0.0.1:4100` /
-   `http://localhost:4100`. Until then, don't run Core while visiting
-   untrusted sites.
-2. **Hardcoded prompt timezone.** `prompts/loader.ts` defaults to
-   `Asia/Kolkata`; relative-day queries ("yesterday") resolve on IST
-   boundaries for judges elsewhere. Planned: default to the machine zone via
-   `Intl.DateTimeFormat().resolvedOptions().timeZone`.
-3. **Trace scrub is pattern-based.** The 7 regexes catch known credential
-   shapes; unusual formats can slip through. Treat traces as sensitive.
+1. **Host and Origin Enforcement (Implemented).** Core validates `Host` (rejecting DNS rebinding) and rejects requests whose `Origin` is present and not `http://127.0.0.1:4100` or `http://localhost:4100`, blocking cross-origin browser exploitation of approvals.
+2. **Dynamic Machine Timezone (Implemented).** `prompts/loader.ts` dynamically resolves the user's local timezone via `Intl.DateTimeFormat().resolvedOptions().timeZone`, ensuring relative-day queries ("yesterday") resolve against local clock boundaries.
+3. **Trace scrub is pattern-based.** The 7 regexes catch known credential shapes; unusual formats can slip through. Treat traces as sensitive.
 

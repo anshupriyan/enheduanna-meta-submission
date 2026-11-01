@@ -54,11 +54,34 @@ export class CoreServer {
     });
   }
 
+  private isAllowedHost(host: string, port: number): boolean {
+    const cleanHost = host.toLowerCase().trim();
+    const allowed = new Set([
+      `127.0.0.1:${port}`,
+      `localhost:${port}`,
+      "127.0.0.1",
+      "localhost",
+    ]);
+    return allowed.has(cleanHost);
+  }
+
+  private isAllowedOrigin(origin: string, port: number): boolean {
+    const allowed = new Set([
+      `http://127.0.0.1:${port}`,
+      `http://localhost:${port}`,
+    ]);
+    return allowed.has(origin);
+  }
+
   private sendJson(res: ServerResponse, status: number, data: unknown) {
-    res.writeHead(status, {
+    const headers: Record<string, string> = {
       "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-    });
+    };
+    const origin = (res as any)._origin;
+    if (origin) {
+      headers["Access-Control-Allow-Origin"] = origin;
+    }
+    res.writeHead(status, headers);
     res.end(JSON.stringify(data));
   }
 
@@ -67,13 +90,38 @@ export class CoreServer {
   }
 
   private async handleRequest(req: IncomingMessage, res: ServerResponse): Promise<void> {
+    const port = this.config.server.port || 4100;
+
+    // Validate Host header against DNS rebinding attacks
+    const hostHeader = req.headers.host;
+    if (!hostHeader || !this.isAllowedHost(hostHeader, port)) {
+      res.writeHead(403, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: `Forbidden: Invalid Host header '${hostHeader || ""}'` }));
+      return;
+    }
+
+    // Validate Origin header if present against cross-origin browser requests
+    const origin = req.headers.origin;
+    if (origin && !this.isAllowedOrigin(origin, port)) {
+      res.writeHead(403, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: "Forbidden: Cross-origin request not permitted" }));
+      return;
+    }
+
+    if (origin) {
+      (res as any)._origin = origin;
+    }
+
     // CORS preflight
     if (req.method === "OPTIONS") {
-      res.writeHead(204, {
-        "Access-Control-Allow-Origin": "*",
+      const headers: Record<string, string> = {
         "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      });
+      };
+      if (origin) {
+        headers["Access-Control-Allow-Origin"] = origin;
+      }
+      res.writeHead(204, headers);
       res.end();
       return;
     }
@@ -128,7 +176,7 @@ export class CoreServer {
 
       // GET /trace (SSE stream)
       if (req.method === "GET" && pathname === "/trace") {
-        traceBus.handleSseStream(res);
+        traceBus.handleSseStream(res, (res as any)._origin);
         return;
       }
 
@@ -159,12 +207,16 @@ export class CoreServer {
           sessionId = sessionStore.createSession().id;
         }
 
-        res.writeHead(200, {
+        const sseHeaders: Record<string, string> = {
           "Content-Type": "text/event-stream",
           "Cache-Control": "no-cache, no-transform",
           Connection: "keep-alive",
-          "Access-Control-Allow-Origin": "*",
-        });
+        };
+        const originHeader = (res as any)._origin;
+        if (originHeader) {
+          sseHeaders["Access-Control-Allow-Origin"] = originHeader;
+        }
+        res.writeHead(200, sseHeaders);
 
         const turnOptions = {
           ...(body.options || {}),

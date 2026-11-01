@@ -32,7 +32,25 @@ class MemVisionRequestHandler(SimpleHTTPRequestHandler):
     chat_engine: AIChatEngine
     config: AppConfig
 
+    def _validate_host(self) -> bool:
+        host = self.headers.get("Host", "").strip().lower()
+        server_port = getattr(self.server, "server_port", 8765)
+        allowed_hosts = {
+            f"127.0.0.1:{server_port}",
+            f"localhost:{server_port}",
+            "127.0.0.1:8765",
+            "localhost:8765",
+            "127.0.0.1",
+            "localhost",
+        }
+        if not host or host not in allowed_hosts:
+            self.send_error(HTTPStatus.FORBIDDEN, f"Forbidden: Host '{host}' not permitted")
+            return False
+        return True
+
     def do_GET(self) -> None:
+        if not self._validate_host():
+            return
         parsed_url = urlparse(self.path)
         path = parsed_url.path
         query_params = parse_qs(parsed_url.query)
@@ -77,6 +95,8 @@ class MemVisionRequestHandler(SimpleHTTPRequestHandler):
             self.send_error(HTTPStatus.NOT_FOUND, "Not found")
 
     def do_POST(self) -> None:
+        if not self._validate_host():
+            return
         parsed_url = urlparse(self.path)
         path = parsed_url.path
 
@@ -248,7 +268,6 @@ class MemVisionRequestHandler(SimpleHTTPRequestHandler):
         self.send_response(HTTPStatus.OK)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
-        self.send_header("Access-Control-Allow-Origin", "*")
         self.end_headers()
         self.wfile.write(body)
 

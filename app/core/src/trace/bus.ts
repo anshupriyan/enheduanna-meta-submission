@@ -88,13 +88,16 @@ class TraceBus extends EventEmitter {
     return this.buffer.slice(-limit);
   }
 
-  public handleSseStream(res: ServerResponse): () => void {
-    res.writeHead(200, {
+  public handleSseStream(res: ServerResponse, origin?: string): () => void {
+    const headers: Record<string, string> = {
       "Content-Type": "text/event-stream",
       "Cache-Control": "no-cache, no-transform",
       Connection: "keep-alive",
-      "Access-Control-Allow-Origin": "*",
-    });
+    };
+    if (origin) {
+      headers["Access-Control-Allow-Origin"] = origin;
+    }
+    res.writeHead(200, headers);
 
     // Send initial snapshot of recent events
     const initialEvents = this.getRecentEvents(30);
