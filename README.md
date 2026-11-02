@@ -365,11 +365,7 @@ Three more layers sit on top. `python main.py sanitize` retroactively re-runs th
 
 </details>
 
-### Known limits
-
-- Scrubbing is regex-based and catches known credential formats. Unusual formats can slip through, so treat traces and stored text as sensitive.
-- Screenshots are pruned at 500 MB or 7 days while database rows are kept, so old memories keep their text but lose their image.
-- The localhost APIs have no per-request auth token. The model is a trusted local user.
+*(For the complete security and architectural boundary analysis, see [Known Limits](#known-limits)).*
 
 ---
 
@@ -445,3 +441,14 @@ Last verified: **2026-11-02**, commit `f7dc59b`, Windows 11, Python 3.12, Node 2
 - **IGI:** 19 passed, 0 failed
 
 For full transcripts and detailed test logs, see [docs/test-runs.md](docs/test-runs.md).
+
+---
+
+## Known Limits
+
+1. **Localhost trust.** No per-request auth on `:4100` / `:8765` — any local process can call the APIs. Browser cross-origin requests are rejected (Host + Origin validation).
+2. **Regex-based scrubbing.** Known credential patterns are scrubbed before storage; unusual formats can slip through.
+3. **Screenshot retention.** Images prune at 500MB / 7 days, but database rows are not auto-pruned — old memories keep text, lose images.
+4. **Windows-only.** Requires Windows 10/11 and Python 3.10+ in an interactive session.
+5. **Drafts not collapsed.** Typing growth is detected, but the capture loop doesn't use the in-place update — drafts store as separate captures.
+6. **IGI is text-first.** Icons/diagrams are answered from the crop by model vision, not located locally. The `sam/` name is legacy (Sobel + OCR, no SAM model); on-screen halos are disabled, HUD only.
