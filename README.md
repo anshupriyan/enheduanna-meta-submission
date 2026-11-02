@@ -44,10 +44,23 @@ Named after Enheduanna of Ur (c. 2300 BCE), the world's first known author, it d
 
 ---
 
+## Repository Map
+
+| Path | What's in it |
+|---|---|
+| `app/` | Core TypeScript server, dual-model orchestrator loop, browser dashboard (`:4100`) |
+| `memvison/` | Desktop memory daemon, WinRT OCR, FTS5 search, timeline viewer (`:8765`), MCP server |
+| `igi/` | IGI screen overlay (`Alt+Q`). The `sam/` folder is legacy naming; snapping is local Sobel edge detection + WinRT OCR (no SAM model) |
+| `scripts/` | 1-click setup, test verification (`verify_all_tests.ps1`), and background service launchers |
+| `docs/` | Deep-dive architecture ([`ARCHITECTURE.md`](docs/ARCHITECTURE.md)) and date-stamped test audit logs ([`test-runs.md`](docs/test-runs.md)) |
+
+---
+
 ## Quick Index
 
 | Section | Description |
 |---|---|
+| [**Repository Map**](#repository-map) | Directory overview of `app/`, `memvison/`, `igi/`, `scripts/`, and `docs/` |
 | [**Built with the Meta Model API**](#built-with-the-meta-model-api) | Dual Meta model architecture (`muse-spark-1.3` + `muse-wonder-1.0`), parallel MCP tool calls, vision limit |
 | [**Architecture**](#architecture) | High-level dataflow diagram, 4-tier desktop memory pipeline, and deep-dive links to [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
 | [**Setup**](#setup) | Prerequisites, 1-click `setup.bat`, configuration keys (`enheduanna.config.json`), and daemon startup |
@@ -154,16 +167,6 @@ flowchart LR
 | none | IGI talks to Core on `4100` |
 
 Everything listens on `127.0.0.1`. Your screen memory stays on your machine, and the only traffic that leaves it is calls to the Meta Model API. Your API key is never returned to the browser.
-
-### Repo map
-
-| Path | What's in it |
-|---|---|
-| `app/` | Core server, agent loop, dashboard |
-| `memvison/` | memvision: screen memory, OCR, search, MCP server |
-| `igi/` | IGI overlay. The `sam/` folder and file names are legacy from an early SAM-based design; the current snapping is local edge detection plus WinRT OCR, with no SAM model involved |
-| `scripts/` | Setup and run scripts |
-| `docs/` | Architecture deep-dive ([ARCHITECTURE.md](docs/ARCHITECTURE.md)) and verified test logs ([test-runs.md](docs/test-runs.md)) |
 
 ---
 
