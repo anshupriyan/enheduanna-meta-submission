@@ -370,3 +370,22 @@ Three more layers sit on top. `python main.py sanitize` retroactively re-runs th
 - Scrubbing is regex-based and catches known credential formats. Unusual formats can slip through, so treat traces and stored text as sensitive.
 - Screenshots are pruned at 500 MB or 7 days while database rows are kept, so old memories keep their text but lose their image.
 - The localhost APIs have no per-request auth token. The model is a trusted local user.
+
+---
+
+## Tests & Verification
+
+Enheduanna includes **74 automated unit, integration, acceptance, and loop tests** across Python and Node.js (100% passing).
+
+To run the full automated verification suite:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\verify_all_tests.ps1
+```
+
+To run individual test suites:
+- **Core server & agent loop:** `cd app\core && npm test` (20/20 passed)
+- **MemVision memory, privacy & OCR:** `cd memvison && .\.venv\Scripts\python.exe -m pytest -v` (35/35 passed)
+- **IGI circle-to-ask visual companion:** `cd igi && ..\memvison\.venv\Scripts\python.exe test_igi.py` (19/19 passed)
+
+For full verified logs and test coverage details, see [docs/test-runs.md](docs/test-runs.md).
