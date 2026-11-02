@@ -698,7 +698,10 @@ class ContextExtractor:
         if not target_ws_dir and workspace_hint:
             if _project_root.name.lower() == workspace_hint.lower():
                 target_ws_dir = _project_root
-            elif _project_root.parent.name.lower() == workspace_hint.lower():
+            elif (
+                _project_root.parent.name.lower() == workspace_hint.lower()
+                or workspace_hint.lower() in _project_root.parent.name.lower()
+            ):
                 target_ws_dir = _project_root.parent
             elif (_project_root.parent / workspace_hint).is_dir():
                 target_ws_dir = _project_root.parent / workspace_hint

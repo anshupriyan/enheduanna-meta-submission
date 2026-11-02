@@ -33,7 +33,8 @@ def test_title_and_workspace_path_resolution():
         app_name="Antigravity IDE.exe",
         title="enheduanna - Antigravity IDE - README.md",
     )
-    if Path("c:/meta hackathon/enheduanna/README.md").is_file():
+    repo_readme = Path(__file__).resolve().parent.parent.parent / "README.md"
+    if repo_readme.is_file() or Path("c:/meta hackathon/enheduanna/README.md").is_file():
         assert file_path_enh is not None
         assert "enheduanna" in file_path_enh.lower()
         assert file_path_enh != file_path  # Disambiguated!
