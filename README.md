@@ -44,6 +44,22 @@ Named after Enheduanna of Ur (c. 2300 BCE), the world's first known author, it d
 
 ---
 
+## Quick Index
+
+| Section | Description |
+|---|---|
+| [**Built with the Meta Model API**](#built-with-the-meta-model-api) | Dual Meta model architecture (`muse-spark-1.3` + `muse-wonder-1.0`), parallel MCP tool calls, vision limit |
+| [**Architecture**](#architecture) | High-level dataflow diagram, 4-tier desktop memory pipeline, and deep-dive links to [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
+| [**Setup**](#setup) | Prerequisites, 1-click `setup.bat`, configuration keys (`enheduanna.config.json`), and daemon startup |
+| [**Try it**](#try-it) | Web interface (`:4100`), sample memory questions, and IGI on-screen overlay hotkey (`Alt+Q`) |
+| [**Tools (24)**](#tools) | Complete 24-tool catalog across MemVision (9), cli-bridge (14), and Core runtime (1) |
+| [**Privacy & Safety**](#privacy--safety) | 3-tier privacy engine, regex scrubbing, split-screen blackout curtain, and human approval gates |
+| [**Verification**](#verification) | 1-click test runner (`verify_all_tests.ps1`), claim-to-test mapping, answer-quality eval, and [`docs/test-runs.md`](docs/test-runs.md) |
+| [**Known Limits**](#known-limits) | Localhost trust, regex scrubbing boundary, screenshot retention, and Windows environment scope |
+| [**License**](#license) | Root MIT license terms and subcomponent compatibility |
+
+---
+
 ## Built with the Meta Model API
 
 All reasoning runs through the Meta Model API (`https://api.meta.ai/v1/chat/completions`, streaming SSE). Enheduanna uses two Meta models with different jobs:
