@@ -18,7 +18,7 @@ The AI we use every day has the same blind spot. It only knows what you tell it.
 
 ## Introducing Enheduanna
 
-Enheduanna is an on-device Desktop Intelligence that gives AI the context you already lived, so you don't have to reconstruct it by hand.
+Enheduanna is an on-device Desktop Intelligence that gives AI the context you already lived, so you don't have to reconstruct it by hand — made for the **Meta Global AI Developer Hackathon** in the Indie Developer Track under the *Build for Your World* project theme.
 
 Named after Enheduanna of Ur (c. 2300 BCE), the world's first known author, it does for your desktop what she did with clay tablets: it writes down what the mind would otherwise forget, in a form you can search and act on later.
 
