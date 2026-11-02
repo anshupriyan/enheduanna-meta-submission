@@ -373,19 +373,75 @@ Three more layers sit on top. `python main.py sanitize` retroactively re-runs th
 
 ---
 
-## Tests & Verification
+## Verification
 
-Enheduanna includes **74 automated unit, integration, acceptance, and loop tests** across Python and Node.js (100% passing).
-
-To run the full automated verification suite:
+### 1. Run everything (1 command)
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\verify_all_tests.ps1
 ```
 
-To run individual test suites:
-- **Core server & agent loop:** `cd app\core && npm test` (20/20 passed)
-- **MemVision memory, privacy & OCR:** `cd memvison && .\.venv\Scripts\python.exe -m pytest -v` (35/35 passed)
-- **IGI circle-to-ask visual companion:** `cd igi && ..\memvison\.venv\Scripts\python.exe test_igi.py` (19/19 passed)
+That script executes two suites in sequence:
+- `pytest -v` in `memvison/`
+- `npm test` in `app/core/`
 
-For full verified logs and test coverage details, see [docs/test-runs.md](docs/test-runs.md).
+To run suites individually:
+
+```powershell
+# MemVision memory, privacy, and OCR tests
+cd memvison; .\.venv\Scripts\python.exe -m pytest -v
+
+# Core server, loop, and approval tests
+cd app\core; npm test
+
+# IGI desktop companion overlay tests
+cd igi; ..\memvison\.venv\Scripts\python.exe test_igi.py
+```
+
+*(Note: cli-bridge has its own standalone test suite in its [repository](https://github.com/anshupriyan/cli-bridge/tree/meta-hackathon)).*
+
+### 2. What the suites cover — mapping tests to claims
+
+| Claim in README | Proven by |
+|---|---|
+| App/title/URL masking + secret scrub | `memvison/tests/test_privacy.py` |
+| Split-screen blackout curtain | `memvison/tests/test_spatial_privacy.py` |
+| Video suppression (0.90 similarity) | `memvison/tests/test_stability.py` |
+| FTS5 search + episodes | `test_storage.py`, `test_episodes.py`, `test_mcp.py` |
+| 16 steps / 5 parallel / loop guards | `app/core/test/orchestrator_loop.test.js` |
+| 5 approval gates, 120s timeout | `app/core/test/approval.test.js` |
+| 3-image limit, screenshot handling | `app/core/test/vision.test.js` |
+| "Never claim user didn't do X" | `app/core/test/coverage_limit.test.js` |
+
+**Suite inventory:**
+- **memvision (11 files in `memvison/tests/`):** privacy, spatial privacy, stability, storage, episodes, MCP protocol, change detector, window capture, web server, path resolution, and AI chat fallback.
+- **Core (6 files in `app/core/test/`):** approval gates, orchestrator loop, session persistence, vision message handling, integration acceptance, and coverage limit handling.
+- **IGI (`igi/test_igi.py`):** 19 tests covering geometric bounding, Sobel edge snapping, WinRT OCR context extraction, HUD resizing, lightbox previews, and multi-block walkthroughs.
+
+### 3. Answer-quality eval (`app/core/eval/quality_eval.js`)
+
+Beyond unit tests, `app/core/eval/quality_eval.js` implements an answer-quality rubric to verify that synthesized responses are human-usable rather than raw diagnostic dumps:
+- Evaluates 10 representative scenarios (multitasking, work sessions, distraction, debugging, code inspection, research, media history, productivity, app detection, session summaries) against expected gists and deterministic mock evidence.
+- Scored 0–100 by `judgeAnswer()`:
+
+| Check | Points |
+|---|---|
+| No raw capture IDs | 20 (hard gate) |
+| No OCR dumps, ≤800 chars | 20 (hard gate) |
+| No raw window IDs or hex handles | 15 |
+| Concise lead, ≤6 sentences | 15 |
+| Purpose-grouped (coding / watching / debugging) | 15 |
+| Duration-aware (minutes / glance / background) | 15 |
+
+Pass requires **≥70 points** and **both hard gates**.
+
+*Status:* The harness defines the quality rubric and reference answers for both Spark-only and Spark+Wonder modes. Live-model scoring against this rubric is future work.
+
+### 4. Verified results
+
+Last verified: **2026-11-02**, commit `f7dc59b`, Windows 11, Python 3.12, Node 20:
+- **memvision:** 35 passed, 0 failed
+- **Core:** 20 passed, 0 failed
+- **IGI:** 19 passed, 0 failed
+
+For full transcripts and detailed test logs, see [docs/test-runs.md](docs/test-runs.md).
