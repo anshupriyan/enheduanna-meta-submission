@@ -351,7 +351,10 @@ def extract_text_from_crop(image: Optional[Image.Image]) -> str:
 
     try:
         import winrt._winrt
-        winrt._winrt.init_apartment(winrt._winrt.MTA)
+        try:
+            winrt._winrt.init_apartment(winrt._winrt.MTA)
+        except Exception:
+            pass
         import winrt.windows.graphics.imaging as imaging
         import winrt.windows.storage.streams as streams
         import winrt.windows.media.ocr as winrt_ocr

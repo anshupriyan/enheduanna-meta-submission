@@ -10,8 +10,8 @@ This document details the automated test suite, execution procedures, and verifi
 |---|---|---|---|
 | **MemVision Engine** | Python `pytest` | 35 | **35 / 35 Passed** (100%) |
 | **Enheduanna Core** | Node.js `node:test` | 20 | **20 / 20 Passed** (100%) |
-| **IGI Overlay Components** | Python `unittest` | 16+ | **Passed** |
-| **Total Automated** | | **55** | **100% Green** |
+| **IGI Overlay Components** | Python `unittest` | 19 | **19 / 19 Passed** (100%) |
+| **Total Automated** | | **74** | **100% Green** |
 
 ---
 
@@ -183,3 +183,80 @@ tests/test_window_capture.py::TestWindowCapturePipeline::test_redaction_applies_
   Status: 100% Green - Verified Ready for Submission
 ==========================================================
 ```
+
+### 3.2 IGI Companion Overlay Test Suite (19/19 Passed)
+
+Executed via:
+```powershell
+cd igi
+..\memvison\.venv\Scripts\python.exe test_igi.py
+```
+
+Output:
+```text
+test_01_config_discovery (__main__.TestIgiComponents.test_01_config_discovery)
+Test finding and loading enheduanna.config.json. ...   [OK] Config loaded with Port 4100 and Dual Models (Spark 1.3 + Wonder 1.0)
+ok
+test_02_geometry_utilities (__main__.TestIgiComponents.test_02_geometry_utilities)
+Test bounding box and centroid calculations. ...   [OK] Geometry test passed: BBox=(95, 95, 205, 205), Centroid=(140, 140)
+ok
+test_03_local_sam2_snapping (__main__.TestIgiComponents.test_03_local_sam2_snapping)
+Test local SAM 2 geometric snap on a test canvas. ...   [OK] Local SAM 2 snapped crop: 170x170 px
+ok
+test_04_dual_moe_router (__main__.TestIgiComponents.test_04_dual_moe_router)
+Test routing between gesture and concept paths. ...   [OK] Dual MoE Router successfully routed gesture and concept paths
+ok
+test_05_active_window_context (__main__.TestIgiComponents.test_05_active_window_context)
+Test extracting active foreground window info. ...   [OK] Foreground Context: App='WindowsTerminal.exe', Title='Windows PowerShell...'
+ok
+test_06_collapsible_tool_drawer (__main__.TestIgiComponents.test_06_collapsible_tool_drawer)
+Test ToolCallsDrawer, detailed tool name tracking, and markdown formatting. ...   [OK] Collapsible Tool Drawer: 2 tools tracked (60ms), collapse/expand verified
+ok
+test_07_hud_window_resizing (__main__.TestIgiComponents.test_07_hud_window_resizing)
+Test scalable HUD window, edge hit-testing, and expand toggle. ...   [OK] HUD Scalability & Real Tool Name Dispatch Verified
+ok
+test_08_image_lightbox_and_crop_preview (__main__.TestIgiComponents.test_08_image_lightbox_and_crop_preview)
+Test ImageLightboxDialog and ContextPreviewCard full-res preview. ...   [OK] Image Lightbox & Full-Resolution Preview Verified (600x400 px)
+ok
+test_09_interactive_approval_dialog (__main__.TestIgiComponents.test_09_interactive_approval_dialog)
+Test ApprovalCardWidget, Allow/Deny interactive actions, and HUD resolution. ...   [OK] Interactive Tool Approval Card & HUD Allow/Deny Resolution Verified
+ok
+test_10_full_window_telemetry_enrichment (__main__.TestIgiComponents.test_10_full_window_telemetry_enrichment)
+Test WindowContext enrichment: Explorer folder path, browser URL, and surrounding context. ...   [OK] Full Window Telemetry Enrichment Verified: Path='C:\meta hackathon'
+ok
+test_11_live_screen_concept_locator (__main__.TestIgiComponents.test_11_live_screen_concept_locator)
+Test optical concept locator for finding on-screen UI buttons (e.g. Update button). ...   [OK] Optical Concept Locator Verified: found 'update button' at [1149, 9, 1231, 36]
+ok
+test_12_concept_prompt_extraction_and_empty_fallback (__main__.TestIgiComponents.test_12_concept_prompt_extraction_and_empty_fallback)
+Test extraction of clean concept queries and prevention of hallucinated bboxes. ...   [OK] Concept Prompt Extraction & Anti-Hallucination Fallback Verified
+ok
+test_13_walkthrough_and_floating_tooltips (__main__.TestIgiComponents.test_13_walkthrough_and_floating_tooltips)
+Test Live Walkthrough block segmentation, floating tooltips, and dollar credit parsing. ...   [OK] Live Walkthrough & Floating Anchored Tooltips Verified
+ok
+test_14_sam_moe_concept_walkthrough_and_robust_matching (__main__.TestIgiComponents.test_14_sam_moe_concept_walkthrough_and_robust_matching)
+Test SAM 2 vs SAM 3 MoE routing, anti-overmatching, and projector topmost positioning. ...   [OK] SAM MoE Architecture, Aliases & Full Walkthrough Projection Verified
+ok
+test_15_live_session_graph_walkthrough (__main__.TestIgiComponents.test_15_live_session_graph_walkthrough)
+Test Live Session automatic multi-block segmentation on mathematical graph/diagram pages. ...   [OK] Live Session Real-Time Graph Walkthrough Verified: 3 cases accurately segmented
+ok
+test_16_spark_card_instruction_and_visual_reasoning_loop (__main__.TestIgiComponents.test_16_spark_card_instruction_and_visual_reasoning_loop)
+Test Spark dynamic card text generation, SAM 3.1 reply/send segmentation, and visual change self-loop. ...   [OK] Spark Card Instruction Generated: 'Draft copied: Click here and press Ctrl+V to paste your reply.'
+  [OK] Visual Change Detection Verified: 761 pixels changed upon text paste
+  [OK] Proactive Visual Reasoning Self-Loop (Reply Box -> Text Entered -> Send Button) Verified
+ok
+test_17_spark_brain_sam_hands_grounding (__main__.TestIgiComponents.test_17_spark_brain_sam_hands_grounding)
+Test Spark-as-Brain -> SAM-as-Hands grounding pipeline and YouTube right-rail video location. ...   [OK] Spark Brain -> SAM Hands Grounding Verified: Target 'TechLinked video thumbnail' in right rail at [1299, 451, 1446, 480]
+ok
+test_18_wiktionary_igi_spatial_planner_walkthrough (__main__.TestIgiComponents.test_18_wiktionary_igi_spatial_planner_walkthrough)
+Test Spark Spatial Planner on Wiktionary 𒅆: 3-4 semantic targets, no Appearance/Light noise, 1-pass cards. ...   [OK] Wiktionary IGI (U+12146) Spatial Planner Walkthrough Verified: 4 semantic targets planned (0 noise), instant 1-pass cards rendered
+ok
+test_19_wikipedia_graph_theory_no_stale_cuneiform_leak (__main__.TestIgiComponents.test_19_wikipedia_graph_theory_no_stale_cuneiform_leak)
+Test that non-cuneiform pages (e.g. Graph theory - Wikipedia) NEVER leak stale cuneiform targets. ...   [OK] Graph Theory Wikipedia Zero-Leakage Verified: 4 graph-specific targets planned (zero cuneiform)
+ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 8.431s
+
+OK
+```
+

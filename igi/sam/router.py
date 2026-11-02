@@ -7,8 +7,15 @@ Zero cloud segmentation dependency: 100% local, fast (<25ms), offline-capable, a
 from __future__ import annotations
 
 import re
+import concurrent.futures
 from typing import List, Tuple, Dict, Any, Optional
 from PIL import Image
+
+_winrt_ocr_executor = concurrent.futures.ThreadPoolExecutor(max_workers=2, thread_name_prefix="WinRT_OCR_Worker")
+
+def _safe_winrt_recognize(eng: Any, sb: Any) -> Any:
+    """Executes WinRT recognize_async from background MTA worker to avoid STA blocking RuntimeError."""
+    return _winrt_ocr_executor.submit(lambda: eng.recognize_async(sb).get()).result(timeout=6.0)
 
 try:
     from .local_sam2 import LocalSAM2Engine
@@ -214,7 +221,10 @@ class DualMoESAMRouter:
 
         try:
             import winrt._winrt
-            winrt._winrt.init_apartment(winrt._winrt.MTA)
+            try:
+                winrt._winrt.init_apartment(winrt._winrt.MTA)
+            except Exception:
+                pass
             import winrt.windows.graphics.imaging as imaging
             import winrt.windows.storage.streams as streams
             import winrt.windows.media.ocr as winrt_ocr
@@ -234,7 +244,7 @@ class DualMoESAMRouter:
                 imaging.BitmapAlphaMode.PREMULTIPLIED
             )
             sb.copy_from_buffer(buf)
-            ocr_res = eng.recognize_async(sb).get()
+            ocr_res = _safe_winrt_recognize(eng, sb)
 
             matches = []
             for line in ocr_res.lines:
@@ -322,7 +332,7 @@ class DualMoESAMRouter:
                             imaging.BitmapAlphaMode.PREMULTIPLIED
                         )
                         c_sb.copy_from_buffer(c_buf)
-                        c_res = eng.recognize_async(c_sb).get()
+                        c_res = _safe_winrt_recognize(eng, c_sb)
                         c_text = " ".join(cl.text for cl in c_res.lines).lower()
 
                         matched = False
@@ -380,7 +390,10 @@ class DualMoESAMRouter:
         blocks = []
         try:
             import winrt._winrt
-            winrt._winrt.init_apartment(winrt._winrt.MTA)
+            try:
+                winrt._winrt.init_apartment(winrt._winrt.MTA)
+            except Exception:
+                pass
             import winrt.windows.graphics.imaging as imaging
             import winrt.windows.storage.streams as streams
             import winrt.windows.media.ocr as winrt_ocr
@@ -398,7 +411,7 @@ class DualMoESAMRouter:
                     imaging.BitmapAlphaMode.PREMULTIPLIED
                 )
                 sb.copy_from_buffer(buf)
-                ocr_res = eng.recognize_async(sb).get()
+                ocr_res = _safe_winrt_recognize(eng, sb)
 
                 code_keywords = ("def ", "class ", "import ", "from ", "async ", "function ", "return ", "const ", "let ")
 
