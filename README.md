@@ -452,3 +452,9 @@ For full transcripts and detailed test logs, see [docs/test-runs.md](docs/test-r
 4. **Windows-only.** Requires Windows 10/11 and Python 3.10+ in an interactive session.
 5. **Drafts not collapsed.** Typing growth is detected, but the capture loop doesn't use the in-place update — drafts store as separate captures.
 6. **IGI is text-first.** Icons/diagrams are answered from the crop by model vision, not located locally. The `sam/` name is legacy (Sobel + OCR, no SAM model); on-screen halos are disabled, HUD only.
+
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).

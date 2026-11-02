@@ -1,6 +1,7 @@
 {
   "name": "enheduanna-core",
   "version": "1.0.0",
+  "license": "MIT",
   "description": "Enheduanna localhost integration service and MCP orchestrator",
   "type": "module",
   "scripts": {
