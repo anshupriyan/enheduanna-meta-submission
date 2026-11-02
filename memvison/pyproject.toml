@@ -6,7 +6,6 @@ build-backend = "setuptools.build_meta"
 name = "memvision"
 version = "0.1.0"
 description = "Local-first continuous desktop memory capture, OCR, and MCP server for AI agents"
-readme = "README.md"
 authors = [{ name = "memvision team" }]
 license = { text = "MIT" }
 requires-python = ">=3.10"
@@ -32,5 +31,6 @@ memvision = "memvision.main:main"
 where = ["src"]
 
 [tool.pytest.ini_options]
+addopts = "--basetemp=.pytest_tmp -p no:cacheprovider"
 tmp_path_retention_count = 0
 tmp_path_retention_policy = "none"

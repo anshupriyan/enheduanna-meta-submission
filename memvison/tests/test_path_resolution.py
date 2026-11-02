@@ -12,15 +12,15 @@ from memvision.mcp_server import MCPServer
 def test_title_and_workspace_path_resolution():
     extractor = ContextExtractor()
 
-    # 1. Antigravity IDE format: memvison - Antigravity IDE - README.md
+    # 1. Antigravity IDE format: memvison - Antigravity IDE - pyproject.toml
     file_path, ws_path = extractor.resolve_file_path(
         hwnd=0,
         pid=0,
         app_name="Antigravity IDE.exe",
-        title="memvison - Antigravity IDE - README.md",
+        title="memvison - Antigravity IDE - pyproject.toml",
     )
     assert file_path is not None
-    assert file_path.lower().endswith("readme.md")
+    assert file_path.lower().endswith("pyproject.toml")
     assert "memvison" in file_path.lower()
     assert ws_path is not None
     assert "memvison" in ws_path.lower()
@@ -50,15 +50,15 @@ def test_title_and_workspace_path_resolution():
     assert file_path_code.lower().endswith("privacy.py")
     assert "memvison" in file_path_code.lower()
 
-    # 4. Sublime Text format: README.md (memvison) - Sublime Text
+    # 4. Sublime Text format: pyproject.toml (memvison) - Sublime Text
     file_path_sub, ws_path_sub = extractor.resolve_file_path(
         hwnd=0,
         pid=0,
         app_name="sublime_text.exe",
-        title="README.md (memvison) - Sublime Text",
+        title="pyproject.toml (memvison) - Sublime Text",
     )
     assert file_path_sub is not None
-    assert file_path_sub.lower().endswith("readme.md")
+    assert file_path_sub.lower().endswith("pyproject.toml")
 
     # 5. Direct absolute path in title (e.g. Notepad / Notepad++)
     main_py_abs = str((Path(__file__).resolve().parent.parent / "main.py").resolve())
