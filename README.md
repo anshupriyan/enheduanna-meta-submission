@@ -270,7 +270,7 @@ The only traffic that leaves your machine is HTTPS calls to the Meta Model API: 
 | Run a shell command, copy a file, request new path or command access | Pauses for your Allow/Deny click (120 s, auto-deny on timeout) |
 | Anything restricted | Blocked, even if you approve |
 
-Approval never overrides policy. After you click Allow, cli-bridge checks again and still blocks restricted commands (`curl`, `format`, `shutdown`, ...), inline interpreters (`powershell -Command`, `cmd /c`, `python -c`, ...), restricted paths (`~/.ssh`, credential stores, browser profiles, which can't be granted even by you), and anything outside your allowed roots. The restricted lists ship with sensible defaults, and you can add to them in your policy file. Every action is written to `.cli-bridge-audit.log`. For the full tables, see the approvals part of the Core section in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Approval never overrides policy. After you click Allow, cli-bridge checks again and still blocks restricted commands (`curl`, `format`, `shutdown`, ...), inline interpreters (`powershell -Command`, `cmd /c`, `python -c`, ...), restricted paths (`~/.ssh`, credential stores, browser profiles, which can't be granted even by you), and anything outside your allowed roots. The restricted lists ship with sensible defaults, and you can add to them in your policy file. Every action is written to `.cli-bridge-audit.log`. For the full tables, see the approvals part of the Core section in [docs/ARCHITECTURE.md#8-approvals--two-layers-srcagentapprovalts--cli-bridge-policy](docs/ARCHITECTURE.md#8-approvals--two-layers-srcagentapprovalts--cli-bridge-policy).
 
 ### Local servers: Host and Origin validation
 
