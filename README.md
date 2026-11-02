@@ -148,3 +148,102 @@ Everything listens on `127.0.0.1`. Your screen memory stays on your machine, and
 | `igi/` | IGI overlay. The `sam/` folder and file names are legacy from an early SAM-based design; the current snapping is local edge detection plus WinRT OCR, with no SAM model involved |
 | `scripts/` | Setup and run scripts |
 | `docs/` | Deeper notes |
+
+---
+
+## Setup
+
+### 1. Requirements
+
+| Need | Version |
+|---|---|
+| Windows | 10 or 11 (interactive desktop session) |
+| Python | 3.10 or newer |
+| Node.js | 18 or newer |
+| Meta API key | Your own key |
+
+*(Recommended: Having [uv](https://github.com/astral-sh/uv) installed makes Python environment setup 10x faster; `setup.bat` auto-detects it and gracefully falls back to standard pip if absent).*
+
+### 2. Install
+
+```cmd
+.\setup.bat
+```
+
+This 1-click script handles everything automatically:
+- Clones external dependency `cli-bridge` (the `meta-hackathon` branch) into `../cli-bridge` and compiles it.
+- Creates `memvison/.venv` and installs the memory engine dependencies.
+- **IGI Prompt:** While running, the script asks: `Install PySide6 for IGI Visual HUD now? [Y/n]`. Type **`Y`** (recommended) if you plan to test the on-screen companion HUD overlay (`Ctrl+Shift+Q`). If you skip it (`n`), setup finishes in ~10s and `scripts\launch_igi.bat` will auto-install it on first launch anyway.
+- Builds `app/core` TypeScript server and dashboard.
+- Generates `enheduanna.config.json` with portable relative paths.
+
+The first install downloads about 125 MB and typically takes 1 to 3 minutes. Subsequent runs complete in ~2 seconds with instant idempotent skips.
+
+### 3. Add your Meta API key
+
+Open `enheduanna.config.json` in the repo root and replace the placeholder:
+
+```json
+"model": {
+  "provider": "meta",
+  "toolModel": "muse-spark-1.3",
+  "synthesisModel": "muse-wonder-1.0",
+  "baseUrl": "https://api.meta.ai/v1",
+  "apiKey": "YOUR_META_API_KEY_HERE"
+}
+```
+
+This file is git-ignored, so your key stays on your machine. Use a Meta key only, and don't set other provider keys while testing.
+
+*Other ways:*
+- Set `$env:META_API_KEY = "YOUR_KEY"` in the same PowerShell window you start Core from.
+- Or paste the key into the dashboard's Settings modal after launch ([details](#built-with-the-meta-model-api)).
+
+### 4. Start Core & Dashboard
+
+```cmd
+cd app\core
+npm start
+```
+
+Open [http://127.0.0.1:4100](http://127.0.0.1:4100). You will see the dashboard and, in the live trace panel, both `memvision` and `cli-bridge` MCP servers connecting. You can start chatting immediately, inspect tool reasoning, and toggle screen recording.
+
+### 5. (Optional) Launch IGI — Circle-to-Ask Visual HUD
+
+In a separate terminal:
+
+```cmd
+.\scripts\launch_igi.bat
+```
+
+- An amber eye icon appears in your system tray and the floating obsidian HUD opens.
+- Press **`Ctrl+Shift+Q`** anywhere on your desktop to freeze the screen and circle any error, button, graph, or text.
+- IGI snaps to nearby UI edges, extracts native WinRT OCR context, and streams the answer from Core directly into the HUD.
+
+### 6. Turn on memory
+
+In the dashboard, switch recording **on**. This starts the memvision capture loop. Memory builds as you use your computer, so give it **3 to 5 minutes** before asking about your past. The steps below are ordered so you can try everything else in the meantime.
+
+*Optional:* `cd memvison; .\.venv\Scripts\python.exe main.py ui` opens the memory timeline at http://127.0.0.1:8765.
+
+---
+
+## Try it
+
+### While memory builds (works right away)
+
+| # | Do this | What you should see |
+|---|---|---|
+| 1 | Press **Ctrl+Shift+Q**, circle an error message, a button or a diagram on your screen, then ask about it | IGI snaps your circle to the nearby object and answers in its window |
+| 2 | In the dashboard, ask **"Find a file called [a file you know is in a folder you've allowed]."** | cli-bridge tools run without asking, because the folder is allowed. Watch the tool calls in the trace |
+| 3 | Ask **"Run `echo hello` in the terminal."** | An approval card appears. Allow or deny it, and the action is written to the audit log |
+
+### After a few minutes (needs memory)
+
+| # | Ask | What you should see |
+|---|---|---|
+| 4 | **"What have I been doing for the last few minutes?"** | memvision search tools in the trace, then a summary of your recent activity, including the steps above |
+| 5 | **"What did I just circle with IGI, and what was on that page?"** | The answer names what you circled, with a screenshot from memory if it needed one |
+| 6 | Open a video or article for a minute, then ask **"What page or video did I just have open, and who made it?"** | The answer names it |
+
+If an answer comes back saying there is not enough memory or no memory captured, recording was off or not enough time has passed.
