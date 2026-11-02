@@ -239,6 +239,9 @@ In a separate terminal:
 - Press **`Ctrl+Shift+Q`** anywhere on your desktop to freeze the screen and circle any error, button, graph, or text.
 - IGI snaps to nearby UI edges, extracts native WinRT OCR context, and streams the answer from Core directly into the HUD.
 
+> [!TIP]
+> **If IGI shows "Localhost Core Offline":** Ensure your Meta API key is configured directly in `enheduanna.config.json` in the repository root (Step 3). While configuring the key through the web dashboard Settings works for browser chat, IGI reads configuration from `enheduanna.config.json` (or `$env:META_API_KEY`) to connect and authenticate with Core. Keeping your key in `enheduanna.config.json` is recommended.
+
 ### 6. Turn on memory
 
 In the dashboard, switch recording **on**. This starts the memvision capture loop. Memory builds as you use your computer, so give it **3 to 5 minutes** before asking about your past. The steps below are ordered so you can try everything else in the meantime.
