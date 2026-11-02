@@ -250,6 +250,56 @@ If an answer comes back saying there is not enough memory or no memory captured,
 
 ---
 
+## Tools
+
+Enheduanna exposes 24 tools to the model: 9 from memvision, 14 from cli-bridge, and 1 internal. Spark picks which ones to call, and up to 5 run in parallel per step.
+
+### memvision: memory (read-only)
+
+| Tool | What it does | Gate |
+|---|---|---|
+| `search_desktop_memory` | Full-text search over OCR text, titles, URLs and apps, with time (`since`/`until`), app, and file filters | None |
+| `get_recent_memory` | Latest captures, newest first, with active window titles, tabs, and apps | None |
+| `get_capture_details` | Full OCR text, exact browser URL, metadata and window list for one capture ID | None |
+| `get_memory_statistics` | Total capture counts, database size, time range, and coverage | None |
+| `get_activity_sessions` | Clustered focus sessions / episodes with durations, timestamps, and frame counts | None |
+| `get_capture_windows` | Z-ordered windows for a capture, with positions, visible fractions, and text snippets | None |
+| `get_window_crop` | A window's screenshot crop (or full screen if `0`), privacy-blurred if needed | None |
+| `get_screenshot` | A full-frame screenshot image for visual inspection and multimodal reasoning | None |
+| `get_session_summaries` | Synthesized summaries of focus sessions, main apps, and activity goals | None |
+
+### cli-bridge: actions (policy-gated)
+
+> [!NOTE]
+> `cli-bridge` is pre-existing work adapted for the hackathon. See the [cli-bridge repository (`meta-hackathon` branch)](https://github.com/anshupriyan/cli-bridge/tree/meta-hackathon) for complete standalone documentation and design.
+
+| Tool | What it does | Gate |
+|---|---|---|
+| `read_file` | Read UTF-8 file contents from the workspace (supports line ranges `start_line`..`end_line`) | Allowed directories only |
+| `list_directory` | List contents of a folder, optionally recursive | Allowed directories only |
+| `search_files` | Find files matching a glob pattern (e.g. `*.ts`, `**/*.js`) | Allowed directories only |
+| `grep_content` | Search for fixed strings in files, capped at max results | Allowed directories only |
+| `write_file` | Create or overwrite a file, automatically creating parent directories | Read-write directories only |
+| `edit_file` | Perform exact find-and-replace on a unique string in a file | Read-write directories only |
+| `copy_file` | Copy a file from source to destination | **Asks you every time** |
+| `execute_command` | Run a shell command with argument array (requires Dev Mode) | **Asks you every time**, and restricted commands are always blocked |
+| `toggle_dev_mode` | Enable session-only Dev Mode required for shell commands | **Asks you every time** when enabling |
+| `get_dev_mode_status` | Report whether Dev Mode is currently on | None |
+| `log_journal_entry` | Append a structured summary and changed file list to `PROJECT_LOG.md` | Allowed directories only |
+| `get_recent_journal_entries` | Read the last N entries from `PROJECT_LOG.md` | Allowed directories only |
+| `request_path_access` | Ask to use a new folder for this session (`ro` or `rw`) | **Asks you every time**, and restricted paths can never be granted |
+| `request_command_access` | Ask to allow a new command for this session | **Asks you every time**, and restricted commands can never be granted |
+
+### Internal
+
+| Tool | What it does | Gate |
+|---|---|---|
+| `get_full_result` | Fetch the full text of a tool result that was truncated into an LRU buffer (64 KB, or 128 KB for `read_file`) | None |
+
+**How the gates work.** "Allowed directories only" means the call runs immediately inside a directory you've allowed and is blocked everywhere else. "Asks you every time" means Core pauses and shows an Allow/Deny card (auto-deny after 120 s). Even after you approve, cli-bridge re-checks its restricted lists and can still block the call. Every action is written to `.cli-bridge-audit.log`. See [Privacy & Safety](#privacy--safety).
+
+---
+
 ## Privacy & Safety
 
 Your screen memory stays on your machine. When you ask a question, Enheduanna reads local memory and sends the model only the pieces that question needs.
