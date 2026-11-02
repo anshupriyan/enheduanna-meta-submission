@@ -247,3 +247,76 @@ In the dashboard, switch recording **on**. This starts the memvision capture loo
 | 6 | Open a video or article for a minute, then ask **"What page or video did I just have open, and who made it?"** | The answer names it |
 
 If an answer comes back saying there is not enough memory or no memory captured, recording was off or not enough time has passed.
+
+---
+
+## Privacy & Safety
+
+Your screen memory stays on your machine. When you ask a question, Enheduanna reads local memory and sends the model only the pieces that question needs.
+
+### What stays on your machine, and what leaves
+
+Screenshots, OCR text and the SQLite database live in `memvison/data/` on local disk. OCR runs entirely on-device through Windows WinRT, so no image or text is sent anywhere for recognition (`memvison/src/memvision/ocr.py`).
+
+Many questions are answered from OCR text alone. Some need to look at a screenshot, and then Enheduanna opens the relevant one from local memory. Either way, nothing is uploaded in bulk. The memory stays in place, and only the specific snippets, files or screenshots needed for your question are included in the request.
+
+The only traffic that leaves your machine is HTTPS calls to the Meta Model API: Core's Spark and Wonder turns, IGI's direct fallback when Core is down, and the memvision monitor's standalone chat, which is restricted to `META_API_KEY` (`memvison/src/memvision/ai_chat.py`). Your API key is never returned to the browser: `/health` and `/api/config` expose only `hasApiKey: true/false` (`app/core/src/server.ts`).
+
+### Actions: two gates before anything runs
+
+| What Enheduanna tries to do | What happens |
+|---|---|
+| Read, list, search, write or edit inside a directory you've allowed read-write | Runs immediately |
+| Run a shell command, copy a file, request new path or command access | Pauses for your Allow/Deny click (120 s, auto-deny on timeout) |
+| Anything restricted | Blocked, even if you approve |
+
+Approval never overrides policy. After you click Allow, cli-bridge checks again and still blocks restricted commands (`curl`, `format`, `shutdown`, ...), inline interpreters (`powershell -Command`, `cmd /c`, `python -c`, ...), restricted paths (`~/.ssh`, credential stores, browser profiles, which can't be granted even by you), and anything outside your allowed roots. The restricted lists ship with sensible defaults, and you can add to them in your policy file. Every action is written to `.cli-bridge-audit.log`. For the full tables, see the approvals part of the Core section in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+### Local servers: Host and Origin validation
+
+Binding to `127.0.0.1` isn't enough on its own, because a website open in your browser can normally fetch `localhost`. So both servers validate every request (`app/core/src/server.ts`, `memvison/src/memvision/web_server.py`): the `Host` header must be a loopback name, so DNS-rebinding names get a 403, and any browser `Origin` header must match the server's own origin or the request is rejected. IGI, curl and other local tools send no `Origin` and are unaffected. The trust model is the local user: any process already running as you can call the APIs, since there is no per-request auth token.
+
+<details>
+<summary><b>Capture masking: app, window and URL level</b></summary>
+
+Before anything is stored, every visible window is checked against `memvison/config/privacy_rules.json` (`memvison/src/memvision/privacy.py`). It ships preconfigured with common sensitive targets, and you can add or remove anything in that file:
+
+| Level | What's matched | Preconfigured examples |
+|---|---|---|
+| **App** | Process name, case-insensitive glob + regex | Password managers (`1password.exe`, `bitwarden.exe`, `keepassxc.exe`, `lastpass.exe`, `dashlane.exe`), Windows auth UI (`credentialui.exe`, `consent.exe`), authenticators (`authy.exe`), `discord*.exe` |
+| **Window title** | Title glob | `*Incognito*`, `*InPrivate*`, `*Master Password*`, `*Enter PIN*`, `*.env*`, `*id_rsa*`, `*credentials*` |
+| **URL** | Active tab URL via UI Automation | Banks (`*chase.com*`, `*paypal.com*`, `*coinbase.com*`), identity (`*accounts.google.com/signin*`, `*okta.com*`), browser internals (`chrome://password-manager*`, `brave://wallet*`, `about:logins*`) |
+
+These are starting points, not a fixed list. Edit the rules for your own setup, for example to mask a work chat app or to unblock one of the defaults.
+
+The default mode is `blocklist` with `action_on_block: drop`: a match stores nothing, with no database row and no image. Set it to `redact` and a `[REDACTED]` marker is stored instead. You can also switch to `allowlist` mode with `allowed_apps` / `allowed_urls`. Rules hot-reload when the file changes, with no restart needed. To test the gate without capturing anything:
+
+```powershell
+python main.py privacy-test --app 1password.exe --title "Master Password"
+```
+
+</details>
+
+<details>
+<summary><b>Spatial masking: the split-screen problem</b></summary>
+
+You're coding on the left and Discord is open on the right. A naive recorder photographs both. Enheduanna evaluates every visible window, not just the foreground one (`filter_blocked_windows()`), and paints an opaque curtain over violating rectangles before OCR runs (`memvison/src/memvision/capture.py`), so their text is never read. If the active window is blocked but covers under 85% of the screen while an allowed window is visible, the capture is rescued onto the allowed window instead of dropped. Pixels hidden underneath another window are blanked to neutral gray inside each crop, so covered text can't leak, and `redact` windows are blurred with their text replaced. Which apps were masked is recorded in capture metadata (`is_spatially_masked`) so you can audit it later.
+
+</details>
+
+<details>
+<summary><b>Secret scrubbing: before storage, not after</b></summary>
+
+A set of built-in regex families in `privacy.py` runs over every OCR result and window title before the SQLite insert. They cover common credential formats: API keys (`sk-*`, `sk-ant-*`, `sk-or-v1-*`, Google `AIza`, AWS `AKIA*`, Hugging Face `hf_*`), GitHub tokens (`ghp_*`), Slack tokens (`xox*-`), Bearer tokens, `api_key` / `secret` / `password` assignments, JWTs, private-key blocks, URL query secrets and document-hash fragments. You can add your own patterns in `privacy_rules.json`, and they merge with the built-in ones.
+
+URLs get a dedicated pass: public parameters are kept (`q`, `v`, `scope`), sensitive ones are replaced (`state`, `code`, `token`, `session_id`, `sig`), along with long hex values, fragments and `/viewer/` path hashes.
+
+Three more layers sit on top. `python main.py sanitize` retroactively re-runs the gate over old rows. `get_window_crop` and `get_screenshot` re-evaluate privacy when serving and blur violating crops. Core's trace bus scrubs known credential patterns before anything reaches the dashboard (`app/core/src/trace/bus.ts`).
+
+</details>
+
+### Known limits
+
+- Scrubbing is regex-based and catches known credential formats. Unusual formats can slip through, so treat traces and stored text as sensitive.
+- Screenshots are pruned at 500 MB or 7 days while database rows are kept, so old memories keep their text but lose their image.
+- The localhost APIs have no per-request auth token. The model is a trusted local user.
