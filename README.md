@@ -416,7 +416,7 @@ cd igi; ..\memvison\.venv\Scripts\python.exe test_igi.py
 **Suite inventory:**
 - **memvision (11 files in `memvison/tests/`):** privacy, spatial privacy, stability, storage, episodes, MCP protocol, change detector, window capture, web server, path resolution, and AI chat fallback.
 - **Core (6 files in `app/core/test/`):** approval gates, orchestrator loop, session persistence, vision message handling, integration acceptance, and coverage limit handling.
-- **IGI (`igi/test_igi.py`):** 19 tests covering geometric bounding, Sobel edge snapping, WinRT OCR context extraction, HUD resizing, lightbox previews, and multi-block walkthroughs.
+- **IGI (`igi/test_igi.py`):** 19 tests covering geometric bounding, Sobel edge snapping, WinRT OCR context extraction, HUD resizing, lightbox previews, and multi-block walkthroughs. *(Note: References to "SAM" in test names and folder paths are legacy compatibility aliases from an early prototype; as documented in [Architecture](docs/ARCHITECTURE.md#igi-circle-to-ask-eye-igi), no SAM neural network or model runs — snapping is 100% deterministic local Sobel edge detection plus native WinRT OCR).*
 
 ### 3. Answer-quality eval (`app/core/eval/quality_eval.js`)
 

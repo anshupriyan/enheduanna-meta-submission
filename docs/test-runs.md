@@ -186,6 +186,12 @@ tests/test_window_capture.py::TestWindowCapturePipeline::test_redaction_applies_
 
 ### 3.2 IGI Companion Overlay Test Suite (19/19 Passed)
 
+> [!NOTE]
+> **Why do test names and code paths mention `SAM`?**
+> An early hackathon prototype explored Segment Anything Model (SAM) weights for visual region segmentation. However, loading heavy neural segmentation models on consumer laptops proved too slow (~1.5–3s latency, hundreds of MB of GPU VRAM).
+> As documented in [ARCHITECTURE.md](ARCHITECTURE.md#igi-circle-to-ask-eye-igi), the production IGI engine completely replaced SAM with **lightweight deterministic Sobel gradient edge snapping (<15ms) and native on-device Windows WinRT OCR**.
+> No SAM model, weights, or PyTorch checkpoints run in Enheduanna. Variable names (`local_sam2`, `sam_router`) and test identifiers in `test_igi.py` are preserved solely as legacy compatibility aliases.
+
 Executed via:
 ```powershell
 cd igi
