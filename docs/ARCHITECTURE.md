@@ -453,3 +453,177 @@ makes no network call. CLI: `run` (loop), `once -f`, `search`, `chat`, `mcp`,
 4. **Pattern-based scrubbing.** The 12 regex families catch known credential
    shapes, and unusual formats can slip through.
 
+---
+
+## IGI: Circle-to-Ask Eye (`igi/`)
+
+> **TL;DR:** A PySide6 desktop overlay launched by `scripts/launch_igi.bat`.
+> Press `Ctrl+Shift+Q`, circle anything on screen, and ask about it in a
+> floating HUD. IGI freezes the screen, snaps your rough circle to nearby UI
+> edges locally, reads on-screen text with WinRT OCR, then sends the crop +
+> window context to Core on `:4100`. No listening port; IGI is a Core client.
+> The `sam/` folder name is legacy. No SAM model runs (see §9).
+> Verified against commit `37857c8`.
+
+> Stack: Python 3.10+, PySide6-Essentials, `mss`, Pillow, `httpx`, `numpy`,
+> `pynput`, `pywin32`. Entry: `python main.py` (or `scripts/launch_igi.bat`).
+
+### 1. What it does
+
+IGI is the visual layer: it turns "this thing on my screen" into a question
+Core can answer. It captures the exact region you circled, enriches it with
+the active window's title, folder path or page URL, surrounding OCR, and the
+circled text, then streams Core's answer back into the HUD, including tool
+activity and approval prompts.
+
+```mermaid
+flowchart LR
+    HK["Ctrl+Shift+Q<br/>overlay/hotkey.py (pynput)"] --> CV["overlay/canvas.py<br/>freeze screen (mss) · draw stroke"]
+    CV -->|"stroke points"| SNAP["sam/local_sam2.py<br/>bbox + Sobel edge snap"]
+    SNAP -->|"snapped crop"| CTX["bridge/screen_context.py<br/>Win32/UIA context + WinRT OCR"]
+    CTX -->|"crop + window context"| HUD["HUD<br/>hud/chat_window.py"]
+    HUD -->|"question"| CC["bridge/core_client.py"]
+    CC -->|"POST /chat · JPEG crop + context"| CORE["Core :4100"]
+    CORE -->|"SSE: tokens · tool status · approvals"| HUD
+
+    HUD -.->|"concept ask: where is...?"| RT["sam/router.py<br/>WinRT OCR word boxes + Sobel"]
+    RT -.->|"scored boxes"| HUD
+
+    CC -.->|"fallback if Core is down<br/>(no memory, tools or approvals)"| META["Meta Model API"]
+```
+
+### 2. Launch & wiring (`main.py`, `config.py`)
+
+`main.py` creates one `DualMoESAMRouter`, one `IgiCanvasOverlay`, and one
+`IgiHudWindow(projector=None)`, then wires
+`overlay.selection_completed → hud.set_selection_context` and
+`HotkeyBridge.triggered → overlay.freeze_screen_and_show`. A system tray icon
+(amber eye) offers Circle / HUD / Exit; the HUD shows on launch.
+`QApplication.setQuitOnLastWindowClosed(False)` keeps the tray alive.
+
+Config merges `enheduanna.config.json` (searched up 4 parents) with env
+overrides (`META_API_KEY`, `ENHEDUANNA_PORT`): Core `127.0.0.1:4100`, tool
+model `muse-spark-1.3`, synthesis `muse-wonder-1.0`, hotkey
+`<ctrl>+<shift>+q`, HUD 440×600 at bottom-right (36px margins, amber
+`#f59e0b` on obsidian `#0d0f12`). Spatial flags: local geometry on, optical
+OCR on, projections off, minimum selection 16px. Backwards-compat accessors
+map `enable_local_sam2 → enable_local_geometry` and force
+`enable_cloud_sam3 → False`.
+
+### 3. Circle flow (`overlay/canvas.py`, `overlay/hotkey.py`)
+
+`GlobalHotkeyManager` (pynput, daemon thread) emits a Qt signal on
+`Ctrl+Shift+Q`. `freeze_screen_and_show()` grabs the virtual desktop with
+`mss` (`monitors[0]`) *before* the overlay takes focus, converts it to a
+fullscreen pixmap, and shows a frameless, always-on-top, translucent canvas
+with a cross cursor. Mouse press/move/release records `stroke_points`;
+painting dims the frozen screen 40% and draws an amber stylus stroke (3px +
+8px halo) with its bounding box. `Esc` cancels. On release, the stroke is
+routed to snapping (§4), OCR'd, enriched with window context (§5), and
+emitted to the HUD as a preview card.
+
+### 4. Spatial grounding (`sam/router.py`, `sam/local_sam2.py`, `sam/mask_utils.py`)
+
+Despite the folder name, this is classical local grounding: no torch, no
+checkpoints, no masks. `DualMoESAMRouter` is deterministic dispatch:
+
+- **Gesture:** `route_gesture()` → `LocalSAM2Engine.segment_gesture()`:
+  padded bbox + centroid from stroke points (100px fallback if < 10px), then
+  `refine_box()` snaps each edge to the strongest Sobel gradient peak within
+  ±14px, only when `scipy` is importable and the peak clears
+  `max > mean × 1.35 and > 12.0`; otherwise the rough bbox is used unchanged.
+- **Concept:** `ground_target()` restricts search by region hint (top 28%,
+  left 36%, right 36%, bottom 32%, center 76%, any = full), finds WinRT OCR
+  word boxes matching quoted phrases / concept tokens, optionally expands to
+  an enclosing container via Sobel edge labelling, excludes the HUD rect,
+  Sobel-refines, and returns up to 4 scored boxes. Optional Spark crop
+  verification runs only if the caller supplies it.
+- **Blocks:** `segment_blocks()` clusters WinRT lines into up to 4 code /
+  heading blocks (skipping the top 80px of browser chrome), Sobel-refined.
+
+`mask_utils.py` is pure geometry: bbox, centroid, crop, neon-glow rendering.
+`cloud_client` / `cloud_sam3` are aliases to `self`; there is no cloud
+segmentation call.
+
+### 5. Screen context (`bridge/screen_context.py`)
+
+Before a question is sent, IGI describes what you were looking at:
+foreground window (title, process, PID, hwnd, rect) via Win32, Explorer
+folder path (title-is-path, known shell folders, OCR `C:\` regex, UIA
+address bar), browser URL via UIA `ValuePattern` (Brave/Chrome/Edge/
+Firefox), full-window WinRT OCR (capped at 1200 chars for the prompt), and
+per-crop OCR. This becomes the `[Active Window]`, `[Active Directory /
+Folder Path]`, `[Active Web Page URL]`, `[Full Window Screen Context]`, and
+`[Circled Focal Selection]` header Core's system prompt understands.
+
+### 6. Core bridge (`bridge/core_client.py`, `bridge/sam_prompts.py`)
+
+`CoreClient` (`httpx`, 90s timeout) health-checks `GET /health`, ensures a
+session via `POST /api/sessions` (fallback `igi_default_session`), and
+streams `POST /chat` with `{sessionId, message, images, options}`: crop
+resized to ≤1280px, JPEG-85, base64 `data:` URL; options enable two-model
+routing with `maxSteps: 16`. SSE events map to HUD callbacks: `delta` →
+tokens, `reasoning` / `step_start` / `tool_call_start` / `tool_call_done` →
+status line, `approval_required` → Allow/Deny card resolved via
+`POST /api/approvals/:id`, `done` → final answer.
+
+If Core is unreachable and an API key is configured, it falls back to a
+direct Meta `POST /chat/completions` call guided by
+`SPATIAL_PLANNER_SYSTEM` (strict-JSON region planner: 3-5 targets for
+exploration, 1-2 for targeted asks, never browser chrome/HUD unless asked)
+and `CARD_WRITER_SYSTEM` (≤28-word highlight cards). The fallback has no MCP
+tools, no memory, and no approvals (see §9).
+
+### 7. HUD (`hud/chat_window.py`, `hud/stream_view.py`, `hud/cards.py`, `hud/theme.py`)
+
+Frameless 440×600 window, draggable by its header, edge-resizable, solid
+dark theme (no transparency). All heavy work (OCR, context, Core streaming)
+runs in a worker thread feeding Qt signals, so the UI never blocks on the
+network. The transcript shows user/agent bubbles, a collapsible tool drawer
+(tool name, duration, detail), context preview + quick-action cards, and
+approval cards. Concept extraction from prompts ("where is...", "highlight...",
+"find...") drives `ground_target()` for locate / walkthrough / reply-box
+flows. `overlay/projector.py` (click-through highlight halos) ships in the
+repo but is disabled in the current launch (`main.py` passes
+`projector=None` and projections are off), so highlights are HUD-only.
+
+### 8. File map
+
+| File | Role |
+|---|---|
+| `main.py` | Qt app, tray, hotkey wiring, startup banner |
+| `config.py` | Core/model/spatial/HUD config + env merge |
+| `overlay/canvas.py` | Freeze-screen drawing canvas, stroke → selection |
+| `overlay/hotkey.py` | pynput global hotkey (`Ctrl+Shift+Q`) |
+| `overlay/projector.py` | Click-through highlight overlay (disabled) |
+| `sam/router.py` | Gesture/concept/block grounding (OCR + Sobel) |
+| `sam/local_sam2.py` | Bbox + Sobel edge snapping (legacy name) |
+| `sam/mask_utils.py` | Bbox / centroid / crop / glow helpers |
+| `bridge/core_client.py` | Core SSE client + direct-Meta fallback |
+| `bridge/screen_context.py` | Win32/UIA window, folder, URL, OCR context |
+| `bridge/sam_prompts.py` | Spatial planner + card writer prompts |
+| `hud/chat_window.py` | HUD window, worker thread, approvals |
+| `hud/stream_view.py` | Transcript bubbles + tool drawer |
+| `hud/cards.py` | Context preview + quick actions |
+| `hud/theme.py` | Dark QSS theme |
+| `test_igi.py` | IGI test suite |
+
+### 9. Known limits (IGI)
+
+1. **Legacy SAM naming.** Folder, classes (`DualMoESAMRouter`,
+   `LocalSAM2Engine`), and prompt names say SAM; no SAM model, weights, or
+   cloud segmentation run. Snapping is Sobel + WinRT OCR.
+2. **Sobel needs scipy.** `refine_box()` silently returns the rough bbox
+   when `scipy` isn't importable; `igi/requirements.txt` doesn't list it.
+3. **Text-first grounding.** Local grounding finds text-bearing UI; icons,
+   images, and diagrams are answered from the crop by the model's vision,
+   not located locally.
+4. **Projector disabled.** On-screen highlight halos exist in code but are
+   off; guidance appears in the HUD only.
+5. **Direct-Meta fallback bypasses Core.** If `:4100` is down, IGI can still
+   answer about a crop, but without memvision memory, cli-bridge tools, or
+   approval gates.
+6. **Windows-only.** PySide6 overlay + pynput hotkey + pywin32 / WinRT OCR /
+   UIA context require Windows 10/11 in an interactive session; the freeze
+   frame uses the `mss` virtual desktop with PassThrough DPI scaling.
+
