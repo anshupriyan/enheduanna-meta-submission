@@ -16,7 +16,7 @@ if (-not (Test-Path $pyExe)) {
 $memvisonDir = Split-Path (Split-Path (Split-Path $pyExe))
 
 Push-Location $memvisonDir
-& $pyExe -m pytest -v
+& $pyExe -m pytest -v -o tmp_path_retention_count=0 -o tmp_path_retention_policy=none
 $pyExit = $LASTEXITCODE
 Pop-Location
 

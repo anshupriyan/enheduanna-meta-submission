@@ -147,7 +147,7 @@ Everything listens on `127.0.0.1`. Your screen memory stays on your machine, and
 | `memvison/` | memvision: screen memory, OCR, search, MCP server |
 | `igi/` | IGI overlay. The `sam/` folder and file names are legacy from an early SAM-based design; the current snapping is local edge detection plus WinRT OCR, with no SAM model involved |
 | `scripts/` | Setup and run scripts |
-| `docs/` | Deeper notes |
+| `docs/` | Architecture deep-dive ([ARCHITECTURE.md](docs/ARCHITECTURE.md)) and verified test logs ([test-runs.md](docs/test-runs.md)) |
 
 ---
 
