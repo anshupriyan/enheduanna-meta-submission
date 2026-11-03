@@ -52,7 +52,7 @@ Named after Enheduanna of Ur (c. 2300 BCE), the world's first known author, it d
 | `memvison/` | Desktop memory daemon, WinRT OCR, FTS5 search, timeline viewer (`:8765`), MCP server |
 | `igi/` | IGI screen overlay (`Ctrl+Shift+Q`). The `sam/` folder is legacy naming; snapping is local Sobel edge detection + WinRT OCR (no SAM model) |
 | `scripts/` | 1-click setup, test verification (`verify_all_tests.ps1`), and background service launchers |
-| `docs/` | Deep-dive architecture ([`ARCHITECTURE.md`](docs/ARCHITECTURE.md)) and date-stamped test audit logs ([`test-runs.md`](docs/test-runs.md)) |
+| `docs/` | Deep-dive architecture ([`ARCHITECTURE.md`](docs/ARCHITECTURE.md)), demo scenario walkthrough ([`demo-walkthrough.md`](docs/demo-walkthrough.md)), and date-stamped test audit logs ([`test-runs.md`](docs/test-runs.md)) |
 
 ---
 
