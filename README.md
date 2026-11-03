@@ -33,7 +33,7 @@ Named after Enheduanna of Ur (c. 2300 BCE), the world's first known author, it d
 ---
 
 > [!NOTE]
-> **Pre-existing work disclosure.** The only work here that predates this hackathon is **[cli-bridge](https://github.com/anshupriyan/cli-bridge)**, my TypeScript/Node.js MCP server that gives an AI controlled shell and file access to a machine.
+> **Pre-existing work disclosure.** The only work here that predates this hackathon is **[cli-bridge](https://github.com/anshupriyan/cli-bridge)**, completely my own original open-source work (MIT licensed), my TypeScript/Node.js MCP server that gives an AI controlled shell and file access to a machine.
 >
 > **cli-bridge is not part of this repository.** None of its code or history is included here. It is downloaded separately as an external dependency during setup, from the [`meta-hackathon` branch](https://github.com/anshupriyan/cli-bridge/tree/meta-hackathon).
 >
@@ -50,7 +50,7 @@ Named after Enheduanna of Ur (c. 2300 BCE), the world's first known author, it d
 |---|---|
 | `app/` | Core TypeScript server, dual-model orchestrator loop, browser dashboard (`:4100`) |
 | `memvison/` | Desktop memory daemon, WinRT OCR, FTS5 search, timeline viewer (`:8765`), MCP server |
-| `igi/` | IGI screen overlay (`Alt+Q`). The `sam/` folder is legacy naming; snapping is local Sobel edge detection + WinRT OCR (no SAM model) |
+| `igi/` | IGI screen overlay (`Ctrl+Shift+Q`). The `sam/` folder is legacy naming; snapping is local Sobel edge detection + WinRT OCR (no SAM model) |
 | `scripts/` | 1-click setup, test verification (`verify_all_tests.ps1`), and background service launchers |
 | `docs/` | Deep-dive architecture ([`ARCHITECTURE.md`](docs/ARCHITECTURE.md)) and date-stamped test audit logs ([`test-runs.md`](docs/test-runs.md)) |
 
@@ -64,7 +64,7 @@ Named after Enheduanna of Ur (c. 2300 BCE), the world's first known author, it d
 | [**Built with the Meta Model API**](#built-with-the-meta-model-api) | Dual Meta model architecture (`muse-spark-1.3` + `muse-wonder-1.0`), parallel MCP tool calls, vision limit |
 | [**Architecture**](#architecture) | High-level dataflow diagram, 4-tier desktop memory pipeline, and deep-dive links to [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
 | [**Setup**](#setup) | Prerequisites, 1-click `setup.bat`, configuration keys (`enheduanna.config.json`), and daemon startup |
-| [**Try it**](#try-it) | Web interface (`:4100`), sample memory questions, and IGI on-screen overlay hotkey (`Alt+Q`) |
+| [**Try it**](#try-it) | Web interface (`:4100`), sample memory questions, and IGI on-screen overlay hotkey (`Ctrl+Shift+Q`) |
 | [**Tools (24)**](#tools) | Complete 24-tool catalog across MemVision (9), cli-bridge (14), and Core runtime (1) |
 | [**Privacy & Safety**](#privacy--safety) | 3-tier privacy engine, regex scrubbing, split-screen blackout curtain, and human approval gates |
 | [**Verification**](#verification) | 1-click test runner (`verify_all_tests.ps1`), claim-to-test mapping, answer-quality eval, and [`docs/test-runs.md`](docs/test-runs.md) |
