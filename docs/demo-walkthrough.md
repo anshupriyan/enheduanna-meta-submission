@@ -14,15 +14,14 @@ This document describes the end-to-end scenario featured in the Enheduanna demon
 
 ## 2. Pre-Break Activity: The 40-Minute Scattered Session
 
-Before taking a break, the developer spends ~40 minutes actively multitasking across five desktop surfaces (recorded locally across **231 captures** by MemVision):
+Before taking a break, the developer spends ~40 minutes actively multitasking across several applications (recorded locally across **231 captures** by MemVision):
 
-| Surface / App | Activity Description | Local Capture Footprint |
-|---|---|---|
-| **LeetCode (Browser)** | Practicing algorithmic problem solving and debugging solution test cases. | Captured page titles, problem prompt, and editor code snippets. |
-| **Wikipedia (Browser)** | Reading deep historical background on ancient Mesopotamia, Sumer, and the world's first named poet, Enheduanna of Ur. | Captured specific article headings, timeline charts, and paragraph text. |
-| **Assignment PDF (Browser / Viewer)** | Working through a university / course assignment document with specific problem requirements. | Captured assignment title, problem prompt, and current page. |
-| **YouTube (Browser)** | Watching an OBS Studio tutorial on setup and recording configurations. | Captured video player title, channel, and UI controls. |
-| **VS Code (Full Screen)** | Editing a working draft notes file (`.md`) without explicitly saving a memorable path or naming it to any external tool. | Captured editor window content, active buffers, and terminal panels. |
+| Surface / App | What the User Was Doing |
+|---|---|
+| **LeetCode (Browser)** | Practicing algorithmic problem solving and debugging solution test cases. |
+| **Wikipedia (Browser)** | Reading deep historical background on ancient Mesopotamia, Sumer, and Enheduanna of Ur. |
+| **Assignment PDF (Browser / Viewer)** | Working through a course assignment document with specific problem requirements. |
+| **YouTube (Browser)** | Watching an OBS Studio tutorial on setup and recording configurations. |
 
 During this session, MemVision captures screen states locally, runs local WinRT OCR, and indexes text into SQLite FTS5. Sensitive applications remain masked before OCR processing.
 
