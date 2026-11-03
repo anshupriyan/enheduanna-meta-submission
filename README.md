@@ -52,7 +52,7 @@ Named after Enheduanna of Ur (c. 2300 BCE), the world's first known author, it d
 | `memvison/` | Desktop memory daemon, WinRT OCR, FTS5 search, timeline viewer (`:8765`), MCP server |
 | `igi/` | IGI screen overlay (`Ctrl+Shift+Q`). The `sam/` folder is legacy naming; snapping is local Sobel edge detection + WinRT OCR (no SAM model) |
 | `scripts/` | 1-click setup, test verification (`verify_all_tests.ps1`), and background service launchers |
-| `docs/` | Deep-dive architecture ([`ARCHITECTURE.md`](docs/ARCHITECTURE.md)), demo scenario walkthrough ([`demo-walkthrough.md`](docs/demo-walkthrough.md)), and date-stamped test audit logs ([`test-runs.md`](docs/test-runs.md)) |
+| `docs/` | Deep-dive architecture ([`ARCHITECTURE.md`](docs/ARCHITECTURE.md)), demo scenario walkthrough & chat transcripts ([`demo-walkthrough.md`](docs/demo-walkthrough.md)), live demo terminal audits ([`memvision-demo-audit.md`](docs/memvision-demo-audit.md), [`core-demo-audit.md`](docs/core-demo-audit.md)), and date-stamped test audit logs ([`test-runs.md`](docs/test-runs.md)) |
 
 ---
 
@@ -462,7 +462,11 @@ Last verified: **2026-11-02**, commit `f7dc59b`, Windows 11, Python 3.12, Node 2
 - **Core:** 20 passed, 0 failed
 - **IGI:** 19 passed, 0 failed
 
-For full transcripts and detailed test logs, see [docs/test-runs.md](docs/test-runs.md).
+For full test transcripts and live demo execution audits, see:
+- Automated test logs: [`docs/test-runs.md`](docs/test-runs.md)
+- Demo scenario & full chat transcript: [`docs/demo-walkthrough.md`](docs/demo-walkthrough.md)
+- Live MemVision daemon capture trace: [`docs/memvision-demo-audit.md`](docs/memvision-demo-audit.md)
+- Live Core integration & policy audit: [`docs/core-demo-audit.md`](docs/core-demo-audit.md)
 
 ---
 
