@@ -5136,3 +5136,332 @@ Want me to suggest the 5 best problems to do right after Two Sum in order?
 
 ---
 
+---
+
+## 5. MemVision Daemon Live Capture Audit Log
+
+> **Source Trace:** Live terminal execution of memvision main.py ui during demo recording.\n> **Standalone File:** [memvision-demo-audit.md](memvision-demo-audit.md)\n\n\	ext
+Windows PowerShell 5.1
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+PS C:\Demo-run-folder\enheduanna-meta-submission-main\enheduanna-meta-submission-main\memvison> .\.venv\Scripts\python.exe main.py ui
+03:19:31 [INFO] memvision.privacy: Loaded 17 app, 25 URL, 21 title rules, and 13 text redaction patterns (mode=blocklist).
+03:19:31 [INFO] memvision.ocr: Windows Native WinRT OCR initialized successfully.
+03:19:31 [INFO] memvision.storage: SQLite database and FTS5 full-text index initialized at data\memvision.db
+03:19:31 [INFO] memvision.engine: mem-vision-mcp capture engine started. Polling every 1.0s (hash threshold=3)...
+  📸 Continuous capture loop started in background thread.
+03:19:31 [INFO] memvision.storage: SQLite database and FTS5 full-text index initialized at data\memvision.db
+============================================================
+  🌐 mem-vision-mcp Web Dashboard
+  • Dashboard URL: http://127.0.0.1:8765
+  • SQLite DB:     data/memvision.db
+  Press Ctrl+C to stop the dashboard server.
+============================================================
+03:19:31 [INFO] comtypes.client._code_cache: Imported existing <module 'comtypes.gen' from 'C:\\Demo-run-folder\\enheduanna-meta-submission-main\\enheduanna-meta-submission-main\\memvison\\.venv\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+03:19:31 [INFO] comtypes.client._code_cache: Using writeable comtypes cache directory: 'C:\Demo-run-folder\enheduanna-meta-submission-main\enheduanna-meta-submission-main\memvison\.venv\Lib\site-packages\comtypes\gen'
+03:19:32 [INFO] memvision.engine: 📸 CAPTURE #65: Windows=1 | Fore='WindowsTerminal.exe' (Windows PowerShell) | OCR=1441 chars (397.6ms)
+03:19:33 [INFO] memvision.engine: 📸 CAPTURE #66: Windows=1 | Fore='brave.exe' (mem-vision-mcp | Desktop Memor) | OCR=2341 chars (350.0ms)
+03:19:43 [INFO] memvision.engine: 📸 CAPTURE #67: Windows=1 | Fore='brave.exe' (Enheduanna — Desktop Intellige) | OCR=1068 chars (415.4ms)
+03:19:50 [INFO] memvision.engine: 📸 CAPTURE #69: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=3725 chars (612.2ms)
+03:19:52 [INFO] memvision.engine: 📸 CAPTURE #71: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=4599 chars (696.8ms)
+03:19:53 [INFO] memvision.engine: 📸 CAPTURE #72: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=3430 chars (711.6ms)
+03:19:56 [INFO] memvision.engine: 📸 CAPTURE #73: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=4300 chars (622.3ms)
+03:20:05 [INFO] memvision.engine: 📸 CAPTURE #74: Windows=1 | Fore='obs64.exe' (OBS 33.0.1 - Profile: Untitled) | OCR=527 chars (429.7ms)
+03:20:07 [INFO] memvision.engine: 📸 CAPTURE #76: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=3904 chars (633.6ms)
+03:20:20 [INFO] memvision.engine: 📸 CAPTURE #79: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=4874 chars (617.3ms)
+03:20:26 [INFO] memvision.engine: 📸 CAPTURE #81: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=3599 chars (554.1ms)
+03:20:31 [INFO] memvision.engine: 📸 CAPTURE #82: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=2935 chars (638.6ms)
+03:20:48 [INFO] memvision.engine: 📸 CAPTURE #84: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=3728 chars (579.4ms)
+03:21:02 [INFO] memvision.engine: 📸 CAPTURE #86: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=4494 chars (601.9ms)
+03:21:10 [INFO] memvision.engine: 📸 CAPTURE #89: Windows=1 | Fore='brave.exe' (mem-vision-mcp | Desktop Memor) | OCR=2362 chars (655.4ms)
+03:21:19 [INFO] memvision.engine: 📸 CAPTURE #91: Windows=1 | Fore='brave.exe' (mem-vision-mcp | Desktop Memor) | OCR=3355 chars (612.6ms)
+03:21:21 [INFO] memvision.engine: 📸 CAPTURE #93: Windows=1 | Fore='brave.exe' (mem-vision-mcp | Desktop Memor) | OCR=2333 chars (744.5ms)
+03:21:23 [INFO] memvision.engine: 📸 CAPTURE #95: Windows=1 | Fore='brave.exe' (Enheduanna — Desktop Intellige) | OCR=914 chars (548.7ms)
+03:21:24 [INFO] memvision.engine: 📸 CAPTURE #97: Windows=1 | Fore='brave.exe' (ASSIGNMENT - Brave) | OCR=421 chars (363.9ms)
+03:21:25 [INFO] memvision.engine: 📸 CAPTURE #98: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=4772 chars (660.7ms)
+03:21:40 [INFO] memvision.engine: 📸 CAPTURE #101: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=1949 chars (504.5ms)
+03:21:49 [INFO] memvision.engine: 📸 CAPTURE #103: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=3167 chars (683.7ms)
+03:21:50 [INFO] memvision.engine: 📸 CAPTURE #105: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=4895 chars (651.7ms)
+03:21:51 [INFO] memvision.engine: 📸 CAPTURE #106: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=5670 chars (795.6ms)
+03:22:05 [INFO] memvision.engine: 📸 CAPTURE #108: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=2308 chars (632.8ms)
+03:22:06 [INFO] memvision.engine: 📸 CAPTURE #110: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=4045 chars (674.2ms)
+03:22:07 [INFO] memvision.engine: 📸 CAPTURE #111: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=5253 chars (725.2ms)
+03:22:08 [INFO] memvision.engine: 📸 CAPTURE #113: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=2826 chars (525.5ms)
+03:22:09 [INFO] memvision.engine: 📸 CAPTURE #114: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=4001 chars (748.2ms)
+03:26:26 [INFO] memvision.engine: 📸 CAPTURE #116: Windows=1 | Fore='brave.exe' (ASSIGNMENT - Brave) | OCR=421 chars (369.4ms)
+03:31:38 [INFO] memvision.engine: 📸 CAPTURE #119: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=3919 chars (872.0ms)
+03:31:38 [INFO] memvision.engine: 📸 CAPTURE #120: Windows=1 | Fore='brave.exe' (ASSIGNMENT - Brave) | OCR=614 chars (364.6ms)
+03:31:40 [INFO] memvision.engine: 📸 CAPTURE #122: Windows=1 | Fore='brave.exe' (anshupriyan/enheduanna-meta-su) | OCR=2818 chars (642.6ms)
+03:31:43 [INFO] memvision.engine: 📸 CAPTURE #123: Windows=1 | Fore='brave.exe' (Enheduanna — Desktop Intellige) | OCR=875 chars (394.3ms)
+03:31:44 [INFO] memvision.engine: 📸 CAPTURE #125: Windows=1 | Fore='brave.exe' (ASSIGNMENT - Brave) | OCR=402 chars (372.0ms)
+03:31:46 [INFO] memvision.engine: 📸 CAPTURE #127: Windows=1 | Fore='brave.exe' (How to Use OBS Studio - Comple) | OCR=2052 chars (804.7ms)
+03:31:48 [INFO] memvision.engine: 📸 CAPTURE #129: Windows=1 | Fore='brave.exe' (How to Use OBS Studio - Comple) | OCR=1622 chars (723.7ms)
+03:32:31 [INFO] memvision.engine: 📸 CAPTURE #131: Windows=1 | Fore='brave.exe' (How to Use OBS Studio - Comple) | OCR=2071 chars (607.6ms)
+03:34:05 [INFO] memvision.engine: 📸 CAPTURE #132: Windows=1 | Fore='brave.exe' (How to Use OBS Studio - Comple) | OCR=889 chars (430.0ms)
+03:34:36 [INFO] memvision.engine: 📸 CAPTURE #135: Windows=1 | Fore='brave.exe' (How to Use OBS Studio - Comple) | OCR=1124 chars (574.8ms)
+03:34:57 [INFO] memvision.engine: 📸 CAPTURE #136: Windows=1 | Fore='brave.exe' (How to Use OBS Studio - Comple) | OCR=809 chars (428.6ms)
+03:35:23 [INFO] memvision.engine: 📸 CAPTURE #138: Windows=1 | Fore='brave.exe' (How to Use OBS Studio - Comple) | OCR=980 chars (462.4ms)
+03:35:29 [INFO] memvision.engine: 📸 CAPTURE #140: Windows=1 | Fore='brave.exe' (How to Use OBS Studio - Comple) | OCR=792 chars (462.6ms)
+03:35:38 [INFO] memvision.engine: 📸 CAPTURE #142: Windows=1 | Fore='brave.exe' (How to Use OBS Studio - Comple) | OCR=1162 chars (549.0ms)
+03:35:52 [INFO] memvision.engine: 📸 CAPTURE #144: Windows=1 | Fore='brave.exe' (How to Use OBS Studio - Comple) | OCR=851 chars (483.0ms)
+03:36:04 [INFO] memvision.engine: 📸 CAPTURE #147: Windows=1 | Fore='brave.exe' (Two Sum - LeetCode - Brave) | OCR=1605 chars (573.5ms)
+03:39:21 [INFO] memvision.engine: 📸 CAPTURE #148: Windows=1 | Fore='brave.exe' (Two Sum - LeetCode - Brave) | OCR=1322 chars (428.9ms)
+03:39:26 [INFO] memvision.engine: 📸 CAPTURE #150: Windows=1 | Fore='brave.exe' (Two Sum - LeetCode - Brave) | OCR=1580 chars (451.4ms)
+03:39:30 [INFO] memvision.engine: 📸 CAPTURE #152: Windows=1 | Fore='brave.exe' (Two Sum - LeetCode - Brave) | OCR=2118 chars (475.9ms)
+03:41:30 [INFO] memvision.engine: 📸 CAPTURE #156: Windows=1 | Fore='brave.exe' (Two Sum - LeetCode - Brave) | OCR=1654 chars (579.1ms)
+03:41:34 [INFO] memvision.engine: 📸 CAPTURE #157: Windows=1 | Fore='brave.exe' (Two Sum - LeetCode - Brave) | OCR=2315 chars (470.6ms)
+03:42:09 [INFO] memvision.engine: 📸 CAPTURE #159: Windows=1 | Fore='brave.exe' (Two Sum - LeetCode - Brave) | OCR=1960 chars (470.1ms)
+03:42:10 [INFO] memvision.engine: 📸 CAPTURE #161: Windows=1 | Fore='brave.exe' (Two Sum - LeetCode - Brave) | OCR=1450 chars (463.6ms)
+03:42:23 [INFO] memvision.engine: 📸 CAPTURE #162: Windows=1 | Fore='brave.exe' (How to Use OBS Studio - Comple) | OCR=880 chars (430.8ms)
+03:42:24 [INFO] memvision.engine: 📸 CAPTURE #164: Windows=1 | Fore='brave.exe' (ASSIGNMENT - Brave) | OCR=402 chars (404.9ms)
+03:42:28 [INFO] memvision.engine: 📸 CAPTURE #166: Windows=1 | Fore='brave.exe' (How to Use OBS Studio - Comple) | OCR=919 chars (480.0ms)
+03:42:30 [INFO] memvision.engine: 📸 CAPTURE #167: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=3885 chars (603.1ms)
+03:42:31 [INFO] memvision.engine: 📸 CAPTURE #168: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=3280 chars (576.1ms)
+03:42:32 [INFO] memvision.engine: 📸 CAPTURE #170: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=5253 chars (706.9ms)
+03:42:33 [INFO] memvision.engine: 📸 CAPTURE #171: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=4171 chars (667.4ms)
+03:42:35 [INFO] memvision.engine: 📸 CAPTURE #173: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=2882 chars (582.8ms)
+03:42:36 [INFO] memvision.engine: 📸 CAPTURE #175: Windows=1 | Fore='brave.exe' (ASSIGNMENT - Brave) | OCR=402 chars (380.1ms)
+03:42:48 [INFO] memvision.engine: 📸 CAPTURE #177: Windows=1 | Fore='explorer.exe' (Demo-run-folder - File Explore) | OCR=528 chars (380.9ms)
+03:46:09 [INFO] memvision.engine: 📸 CAPTURE #178: Windows=1 | Fore='brave.exe' (Untitled - Brave) | OCR=251 chars (201.6ms)
+03:46:10 [INFO] memvision.engine: 📸 CAPTURE #180: Windows=1 | Fore='brave.exe' (ASSIGNMENT - Brave) | OCR=394 chars (199.2ms)
+03:46:27 [INFO] memvision.engine: 📸 CAPTURE #181: Windows=1 | Fore='explorer.exe' () | OCR=2005 chars (504.4ms)
+03:46:28 [INFO] memvision.engine: 📸 CAPTURE #183: Windows=1 | Fore='explorer.exe' () | OCR=1125 chars (416.2ms)
+03:46:29 [INFO] memvision.engine: 📸 CAPTURE #184: Windows=1 | Fore='brave.exe' (ASSIGNMENT - Brave) | OCR=394 chars (366.3ms)
+03:46:31 [INFO] memvision.engine: 📸 CAPTURE #186: Windows=1 | Fore='brave.exe' (How to Use OBS Studio - Comple) | OCR=930 chars (487.2ms)
+03:46:38 [INFO] memvision.engine: 📸 CAPTURE #189: Windows=1 | Fore='obs64.exe' (OBS 33.0.1 - Profile: Untitled) | OCR=527 chars (384.2ms)
+03:46:41 [INFO] memvision.engine: 📸 CAPTURE #190: Windows=1 | Fore='brave.exe' (How to Use OBS Studio - Comple) | OCR=891 chars (446.3ms)
+03:46:50 [INFO] memvision.engine: 📸 CAPTURE #192: Windows=1 | Fore='brave.exe' (How to Use OBS Studio - Comple) | OCR=1433 chars (493.4ms)
+03:47:41 [INFO] memvision.engine: 📸 CAPTURE #194: Windows=1 | Fore='obs64.exe' (OBS 33.0.1 - Profile: Untitled) | OCR=527 chars (362.6ms)
+03:47:43 [INFO] memvision.engine: 📸 CAPTURE #196: Windows=2 | Fore='WindowsTerminal.exe' (Windows PowerShell) | OCR=154 chars (240.4ms)
+03:47:44 [INFO] memvision.engine: 📸 CAPTURE #197: Windows=1 | Fore='WindowsTerminal.exe' (Windows PowerShell) | OCR=510 chars (78.5ms)
+03:47:45 [INFO] memvision.engine: 📸 CAPTURE #199: Windows=1 | Fore='WindowsTerminal.exe' (Windows PowerShell) | OCR=2000 chars (153.8ms)
+03:47:48 [INFO] memvision.engine: 📸 CAPTURE #201: Windows=0 | Fore='explorer.exe' () | OCR=11 chars (0.0ms)
+03:48:12 [INFO] memvision.engine: 📸 CAPTURE #204: Windows=1 | Fore='obs64.exe' (OBS 33.0.1 - Profile: Untitled) | OCR=527 chars (375.2ms)
+03:48:16 [INFO] memvision.engine: 📸 CAPTURE #205: Windows=0 | Fore='explorer.exe' () | OCR=114 chars (0.0ms)
+03:48:17 [INFO] memvision.engine: 📸 CAPTURE #206: Windows=0 | Fore='explorer.exe' () | OCR=12 chars (0.0ms)
+03:52:17 [INFO] memvision.engine: 📸 CAPTURE #208: Windows=1 | Fore='obs64.exe' (OBS 33.0.1 - Profile: Untitled) | OCR=373 chars (355.8ms)
+03:52:18 [INFO] memvision.engine: 📸 CAPTURE #209: Windows=1 | Fore='obs64.exe' (OBS 33.0.1 - Profile: Untitled) | OCR=528 chars (443.9ms)
+03:52:20 [INFO] memvision.engine: 📸 CAPTURE #211: Windows=0 | Fore='explorer.exe' () | OCR=12 chars (0.0ms)
+03:52:22 [INFO] memvision.engine: 📸 CAPTURE #212: Windows=1 | Fore='brave.exe' (How to Use OBS Studio - Comple) | OCR=1759 chars (617.0ms)
+03:52:23 [INFO] memvision.engine: 📸 CAPTURE #214: Windows=1 | Fore='brave.exe' (Enheduanna — Desktop Intellige) | OCR=893 chars (444.8ms)
+03:52:35 [INFO] memvision.engine: 📸 CAPTURE #216: Windows=1 | Fore='brave.exe' (mem-vision-mcp | Desktop Memor) | OCR=331 chars (399.1ms)
+03:52:36 [INFO] memvision.engine: 📸 CAPTURE #217: Windows=1 | Fore='brave.exe' (mem-vision-mcp | Desktop Memor) | OCR=2128 chars (693.5ms)
+03:52:37 [INFO] memvision.engine: 📸 CAPTURE #219: Windows=1 | Fore='brave.exe' (Enheduanna — Desktop Intellige) | OCR=717 chars (400.9ms)
+03:52:52 [INFO] memvision.engine: 📸 CAPTURE #222: Windows=1 | Fore='brave.exe' (Enheduanna — Desktop Intellige) | OCR=1029 chars (434.6ms)
+03:52:59 [INFO] memvision.engine: 📸 CAPTURE #223: Windows=1 | Fore='explorer.exe' () | OCR=856 chars (391.0ms)
+03:53:00 [INFO] memvision.engine: 📸 CAPTURE #224: Windows=1 | Fore='obs64.exe' (OBS 33.0.1 - Profile: Untitled) | OCR=527 chars (450.4ms)
+03:53:04 [INFO] memvision.engine: 📸 CAPTURE #226: Windows=1 | Fore='brave.exe' (Enheduanna — Desktop Intellige) | OCR=970 chars (462.5ms)
+03:53:05 [INFO] memvision.engine: 📸 CAPTURE #228: Windows=1 | Fore='obs64.exe' (OBS 33.0.1 - Profile: Untitled) | OCR=522 chars (389.0ms)
+03:53:06 [INFO] memvision.engine: 📸 CAPTURE #229: Windows=1 | Fore='brave.exe' (Enheduanna — Desktop Intellige) | OCR=971 chars (464.6ms)
+03:53:44 [INFO] memvision.engine: 📸 CAPTURE #230: Windows=1 | Fore='brave.exe' (Enheduanna — Desktop Intellige) | OCR=1460 chars (473.0ms)
+03:53:53 [INFO] memvision.engine: 📸 CAPTURE #232: Windows=1 | Fore='brave.exe' (Enheduanna — Desktop Intellige) | OCR=1950 chars (535.3ms)
+03:55:36 [INFO] memvision.engine: 📸 CAPTURE #234: Windows=1 | Fore='brave.exe' (Enheduanna — Desktop Intellige) | OCR=2576 chars (886.5ms)
+03:55:38 [INFO] memvision.engine: 📸 CAPTURE #236: Windows=1 | Fore='brave.exe' (Enheduanna — Desktop Intellige) | OCR=3685 chars (790.2ms)
+03:59:33 [INFO] memvision.engine: 📸 CAPTURE #241: Windows=1 | Fore='brave.exe' (Untitled - Brave) | OCR=191 chars (360.4ms)
+03:59:34 [INFO] memvision.engine: 📸 CAPTURE #242: Windows=1 | Fore='brave.exe' (Two Sum - LeetCode - Brave) | OCR=1344 chars (545.6ms)
+03:59:51 [INFO] memvision.engine: 📸 CAPTURE #244: Windows=1 | Fore='brave.exe' (Enheduanna — Desktop Intellige) | OCR=1988 chars (564.6ms)
+03:59:52 [INFO] memvision.engine: 📸 CAPTURE #246: Windows=1 | Fore='brave.exe' (Enheduanna — Desktop Intellige) | OCR=2959 chars (734.9ms)
+04:00:38 [INFO] memvision.engine: 📸 CAPTURE #248: Windows=1 | Fore='brave.exe' (Untitled - Brave) | OCR=223 chars (468.1ms)
+04:00:41 [INFO] memvision.engine: 📸 CAPTURE #250: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=5606 chars (850.8ms)
+04:00:55 [INFO] memvision.engine: 📸 CAPTURE #251: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=3768 chars (677.8ms)
+04:00:55 [INFO] memvision.engine: 📸 CAPTURE #252: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=1959 chars (509.2ms)
+04:00:57 [INFO] memvision.engine: 📸 CAPTURE #254: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=4293 chars (816.6ms)
+04:00:59 [INFO] memvision.engine: 📸 CAPTURE #256: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=2997 chars (529.9ms)
+04:01:01 [INFO] memvision.engine: 📸 CAPTURE #257: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=3648 chars (657.6ms)
+04:01:04 [INFO] memvision.engine: 📸 CAPTURE #258: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=4608 chars (636.9ms)
+04:01:04 [INFO] memvision.engine: 📸 CAPTURE #259: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=3452 chars (540.6ms)
+04:01:31 [INFO] memvision.engine: 📸 CAPTURE #260: Windows=1 | Fore='python.exe' (Enheduanna IGI Companion) | OCR=3368 chars (531.9ms)
+04:01:33 [INFO] memvision.engine: 📸 CAPTURE #262: Windows=2 | Fore='python.exe' (IGI (𒅆) • Captured Selection P) | OCR=3457 chars (963.4ms)
+04:01:37 [INFO] memvision.engine: 📸 CAPTURE #263: Windows=1 | Fore='python.exe' (Enheduanna IGI Companion) | OCR=3388 chars (507.1ms)
+04:02:01 [INFO] memvision.engine: 📸 CAPTURE #265: Windows=1 | Fore='python.exe' (Enheduanna IGI Companion) | OCR=2758 chars (536.2ms)
+04:02:14 [INFO] memvision.engine: 📸 CAPTURE #267: Windows=1 | Fore='python.exe' (Enheduanna IGI Companion) | OCR=4990 chars (686.0ms)
+04:02:17 [INFO] memvision.engine: 📸 CAPTURE #270: Windows=1 | Fore='python.exe' (Enheduanna IGI Companion) | OCR=2946 chars (514.7ms)
+04:02:22 [INFO] memvision.engine: 📸 CAPTURE #272: Windows=1 | Fore='brave.exe' (History of Sumer - Wikipedia -) | OCR=3452 chars (569.5ms)
+04:02:26 [INFO] memvision.engine: 📸 CAPTURE #274: Windows=1 | Fore='brave.exe' (Enheduanna — Desktop Intellige) | OCR=3465 chars (694.4ms)
+04:03:41 [INFO] memvision.engine: 📸 CAPTURE #277: Windows=1 | Fore='brave.exe' (ASSIGNMENT - Brave) | OCR=351 chars (368.6ms)
+04:04:00 [INFO] memvision.engine: 📸 CAPTURE #279: Windows=1 | Fore='brave.exe' (Enheduanna — Desktop Intellige) | OCR=2709 chars (731.5ms)
+04:04:04 [INFO] memvision.engine: 📸 CAPTURE #281: Windows=1 | Fore='brave.exe' (ASSIGNMENT - Brave) | OCR=359 chars (359.6ms)
+04:04:14 [INFO] memvision.engine: 📸 CAPTURE #283: Windows=1 | Fore='brave.exe' (Enheduanna — Desktop Intellige) | OCR=2730 chars (705.6ms)
+04:06:15 [INFO] memvision.engine: 📸 CAPTURE #285: Windows=1 | Fore='brave.exe' (Enheduanna — Desktop Intellige) | OCR=3328 chars (741.4ms)
+04:06:28 [INFO] memvision.engine: 📸 CAPTURE #286: Windows=1 | Fore='explorer.exe' (Demo-run-folder - File Explore) | OCR=540 chars (411.8ms)
+04:06:30 [INFO] memvision.engine: 📸 CAPTURE #288: Windows=3 | Fore='explorer.exe' (Demo-run-folder - File Explore) | OCR=791 chars (437.8ms)
+04:06:31 [INFO] memvision.engine: 📸 CAPTURE #289: Windows=1 | Fore='explorer.exe' (Demo-run-folder - File Explore) | OCR=544 chars (455.5ms)
+04:06:33 [INFO] memvision.engine: 📸 CAPTURE #291: Windows=1 | Fore='Code.exe' (ASSIGNMENT_GUIDE.md - Visual S) | OCR=0 chars (245.1ms)
+04:06:34 [INFO] memvision.engine: 📸 CAPTURE #292: Windows=1 | Fore='Code.exe' (ASSIGNMENT_GUIDE.md - Visual S) | OCR=1562 chars (363.6ms)
+04:06:37 [INFO] memvision.engine: 📸 CAPTURE #295: Windows=1 | Fore='Code.exe' (Preview ASSIGNMENT_GUIDE.md - ) | OCR=2713 chars (589.9ms)
+04:06:38 [INFO] memvision.engine: 📸 CAPTURE #296: Windows=1 | Fore='Code.exe' (Preview ASSIGNMENT_GUIDE.md - ) | OCR=2501 chars (660.5ms)
+04:06:40 [INFO] memvision.engine: 📸 CAPTURE #298: Windows=1 | Fore='Code.exe' (Preview ASSIGNMENT_GUIDE.md - ) | OCR=2225 chars (620.2ms)
+04:06:42 [INFO] memvision.engine: 📸 CAPTURE #300: Windows=1 | Fore='Code.exe' (Preview ASSIGNMENT_GUIDE.md - ) | OCR=2495 chars (720.1ms)
+04:06:44 [INFO] memvision.engine: 📸 CAPTURE #302: Windows=1 | Fore='Code.exe' (Preview ASSIGNMENT_GUIDE.md - ) | OCR=2713 chars (682.2ms)
+04:06:53 [INFO] memvision.engine: 📸 CAPTURE #305: Windows=1 | Fore='obs64.exe' (OBS 33.0.1 - Profile: Untitled) | OCR=527 chars (373.1ms)
+04:06:54 [INFO] memvision.engine: 📸 CAPTURE #306: Windows=1 | Fore='Code.exe' (Preview ASSIGNMENT_GUIDE.md - ) | OCR=700 chars (534.5ms)
+04:06:55 [INFO] memvision.engine: 📸 CAPTURE #308: Windows=1 | Fore='Code.exe' (Preview ASSIGNMENT_GUIDE.md - ) | OCR=2713 chars (633.7ms)
+04:06:57 [INFO] memvision.engine: 📸 CAPTURE #310: Windows=1 | Fore='Code.exe' (Preview ASSIGNMENT_GUIDE.md - ) | OCR=2845 chars (569.1ms)
+04:06:59 [INFO] memvision.engine: 📸 CAPTURE #312: Windows=1 | Fore='Code.exe' (Preview ASSIGNMENT_GUIDE.md - ) | OCR=2236 chars (534.7ms)
+04:07:00 [INFO] memvision.engine: 📸 CAPTURE #313: Windows=1 | Fore='Code.exe' (Preview ASSIGNMENT_GUIDE.md - ) | OCR=2713 chars (682.3ms)
+04:07:04 [INFO] memvision.engine: 📸 CAPTURE #315: Windows=1 | Fore='python.exe' (Enheduanna IGI (Eye)) | OCR=2561 chars (677.0ms)
+04:07:07 [INFO] memvision.engine: 📸 CAPTURE #317: Windows=1 | Fore='Code.exe' (Preview ASSIGNMENT_GUIDE.md - ) | OCR=2713 chars (748.1ms)
+04:07:11 [INFO] memvision.engine: 📸 CAPTURE #319: Windows=1 | Fore='python.exe' (Enheduanna IGI (Eye)) | OCR=2568 chars (490.9ms)
+04:07:13 [INFO] memvision.engine: 📸 CAPTURE #320: Windows=1 | Fore='python.exe' (Enheduanna IGI Companion) | OCR=3449 chars (877.2ms)
+04:07:49 [INFO] memvision.engine: 📸 CAPTURE #323: Windows=2 | Fore='python.exe' (IGI (𒅆) • Captured Selection P) | OCR=2916 chars (861.4ms)
+04:07:52 [INFO] memvision.engine: 📸 CAPTURE #324: Windows=1 | Fore='python.exe' (Enheduanna IGI Companion) | OCR=3018 chars (786.0ms)
+04:08:07 [INFO] memvision.engine: 📸 CAPTURE #327: Windows=1 | Fore='brave.exe' (Enheduanna — Desktop Intellige) | OCR=3451 chars (877.7ms)
+04:08:10 [INFO] memvision.engine: 📸 CAPTURE #329: Windows=1 | Fore='brave.exe' (Enheduanna — Desktop Intellige) | OCR=4857 chars (1050.6ms)
+04:08:22 [INFO] memvision.engine: 📸 CAPTURE #330: Windows=1 | Fore='brave.exe' (Enheduanna — Desktop Intellige) | OCR=2888 chars (802.6ms)
+04:08:37 [INFO] memvision.engine: 📸 CAPTURE #333: Windows=1 | Fore='python.exe' (Enheduanna IGI Companion) | OCR=1429 chars (592.1ms)
+04:08:43 [INFO] memvision.engine: 📸 CAPTURE #336: Windows=1 | Fore='python.exe' (Enheduanna IGI Companion) | OCR=3382 chars (853.5ms)
+04:08:46 [INFO] memvision.engine: 📸 CAPTURE #337: Windows=1 | Fore='python.exe' (Enheduanna IGI Companion) | OCR=3192 chars (607.2ms)
+04:08:51 [INFO] memvision.engine: 📸 CAPTURE #339: Windows=1 | Fore='python.exe' (Enheduanna IGI Companion) | OCR=5281 chars (860.2ms)
+04:08:52 [INFO] memvision.engine: 📸 CAPTURE #340: Windows=1 | Fore='python.exe' (Enheduanna IGI Companion) | OCR=2993 chars (571.8ms)
+04:08:57 [INFO] memvision.engine: 📸 CAPTURE #342: Windows=1 | Fore='python.exe' (Enheduanna IGI Companion) | OCR=1676 chars (512.5ms)
+04:09:25 [INFO] memvision.engine: 📸 CAPTURE #345: Windows=1 | Fore='Code.exe' (Preview ASSIGNMENT_GUIDE.md - ) | OCR=2766 chars (698.7ms)
+04:09:29 [INFO] memvision.engine: 📸 CAPTURE #346: Windows=1 | Fore='Code.exe' (ASSIGNMENT_GUIDE.md - Visual S) | OCR=2816 chars (694.1ms)
+04:09:31 [INFO] memvision.engine: 📸 CAPTURE #347: Windows=1 | Fore='python.exe' (Enheduanna IGI Companion) | OCR=2847 chars (552.0ms)
+04:09:33 [INFO] memvision.engine: 📸 CAPTURE #349: Windows=1 | Fore='python.exe' (Enheduanna IGI Companion) | OCR=2308 chars (546.3ms)
+04:09:35 [INFO] memvision.engine: 📸 CAPTURE #350: Windows=1 | Fore='python.exe' (Enheduanna IGI Companion) | OCR=3132 chars (798.2ms)
+04:09:49 [INFO] memvision.engine: 📸 CAPTURE #351: Windows=1 | Fore='python.exe' (Enheduanna IGI Companion) | OCR=3766 chars (826.8ms)
+04:09:49 [INFO] memvision.engine: 📸 CAPTURE #353: Windows=1 | Fore='python.exe' (Enheduanna IGI Companion) | OCR=3107 chars (552.7ms)
+04:09:51 [INFO] memvision.engine: 📸 CAPTURE #355: Windows=1 | Fore='python.exe' (Enheduanna IGI Companion) | OCR=2351 chars (446.8ms)
+04:09:53 [INFO] memvision.engine: 📸 CAPTURE #356: Windows=1 | Fore='python.exe' (Enheduanna IGI Companion) | OCR=3301 chars (843.9ms)
+04:10:02 [INFO] memvision.engine: 📸 CAPTURE #358: Windows=1 | Fore='python.exe' (Enheduanna IGI Companion) | OCR=2042 chars (464.2ms)
+04:10:05 [INFO] memvision.engine: 📸 CAPTURE #361: Windows=1 | Fore='brave.exe' (Enheduanna — Desktop Intellige) | OCR=4538 chars (945.9ms)
+04:10:09 [INFO] memvision.engine: 📸 CAPTURE #363: Windows=1 | Fore='brave.exe' (Two Sum - LeetCode - Brave) | OCR=2427 chars (508.2ms)
+04:10:10 [INFO] memvision.engine: 📸 CAPTURE #364: Windows=1 | Fore='python.exe' (Enheduanna IGI Companion) | OCR=2656 chars (523.0ms)
+04:10:40 [INFO] memvision.engine: 📸 CAPTURE #366: Windows=2 | Fore='python.exe' (IGI (𒅆) • Captured Selection P) | OCR=3284 chars (1043.9ms)
+04:10:45 [INFO] memvision.engine: 📸 CAPTURE #368: Windows=1 | Fore='python.exe' (Enheduanna IGI Companion) | OCR=2353 chars (472.2ms)
+04:10:56 [INFO] memvision.engine: 📸 CAPTURE #370: Windows=1 | Fore='python.exe' (Enheduanna IGI Companion) | OCR=2839 chars (652.1ms)
+04:11:11 [INFO] memvision.engine: 📸 CAPTURE #372: Windows=1 | Fore='brave.exe' (Two Sum - LeetCode - Brave) | OCR=2963 chars (523.3ms)
+04:11:23 [INFO] memvision.engine: 📸 CAPTURE #375: Windows=1 | Fore='Code.exe' (ASSIGNMENT_GUIDE.md - Visual S) | OCR=2381 chars (475.3ms)
+04:11:24 [INFO] memvision.engine: 📸 CAPTURE #376: Windows=1 | Fore='explorer.exe' () | OCR=855 chars (462.3ms)
+04:11:25 [INFO] memvision.engine: 📸 CAPTURE #378: Windows=1 | Fore='explorer.exe' (Demo-run-folder - File Explore) | OCR=541 chars (372.3ms)
+04:11:26 [INFO] memvision.engine: 📸 CAPTURE #379: Windows=1 | Fore='explorer.exe' (Demo-run-folder - File Explore) | OCR=2174 chars (635.4ms)
+04:11:37 [INFO] memvision.engine: 📸 CAPTURE #381: Windows=1 | Fore='explorer.exe' (Demo-run-folder - File Explore) | OCR=566 chars (415.0ms)
+04:11:39 [INFO] memvision.engine: 📸 CAPTURE #383: Windows=2 | Fore='explorer.exe' (Demo-run-folder - File Explore) | OCR=708 chars (390.3ms)
+04:11:50 [INFO] memvision.engine: 📸 CAPTURE #386: Windows=2 | Fore='explorer.exe' (Rename) | OCR=793 chars (515.5ms)
+04:11:52 [INFO] memvision.engine: 📸 CAPTURE #388: Windows=1 | Fore='explorer.exe' (Demo-run-folder - File Explore) | OCR=618 chars (479.3ms)
+04:11:54 [INFO] memvision.engine: 📸 CAPTURE #390: Windows=3 | Fore='explorer.exe' (Demo-run-folder - File Explore) | OCR=928 chars (544.0ms)
+04:11:55 [INFO] memvision.engine: 📸 CAPTURE #392: Windows=1 | Fore='explorer.exe' (Demo-run-folder - File Explore) | OCR=618 chars (386.3ms)
+04:11:56 [INFO] memvision.engine: 🔒 SPATIAL RESCUE: Active [Notepad.exe] is blocked, but [explorer.exe] is visible. Masking [Notepad.exe] and preserving [explorer.exe]!
+04:11:57 [INFO] memvision.engine: 🔒 SPATIAL RESCUE: Active [Notepad.exe] is blocked, but [explorer.exe] is visible. Masking [Notepad.exe] and preserving [explorer.exe]!
+04:11:58 [INFO] memvision.engine: 🔒 SPATIAL RESCUE: Active [Notepad.exe] is blocked, but [explorer.exe] is visible. Masking [Notepad.exe] and preserving [explorer.exe]!
+04:12:04 [INFO] memvision.engine: 📸 CAPTURE #396: Windows=1 | Fore='Code.exe' (ASSIGNMENT_GUIDE.md - Visual S) | OCR=298 chars (444.2ms)
+04:12:05 [INFO] memvision.engine: 📸 CAPTURE #398: Windows=1 | Fore='Code.exe' (ASSIGNMENT_GUIDE.md - Visual S) | OCR=765 chars (409.5ms)
+04:12:09 [INFO] memvision.engine: 📸 CAPTURE #399: Windows=1 | Fore='Code.exe' (ASSIGNMENT_GUIDE.md - Visual S) | OCR=1855 chars (653.0ms)
+04:12:09 [INFO] memvision.engine: 📸 CAPTURE #401: Windows=1 | Fore='Code.exe' (ASSIGNMENT_GUIDE.md - Visual S) | OCR=2661 chars (372.5ms)
+04:12:10 [INFO] memvision.engine: 📸 CAPTURE #402: Windows=1 | Fore='SearchHost.exe' (Search) | OCR=1788 chars (325.8ms)
+04:12:11 [INFO] memvision.engine: 📸 CAPTURE #404: Windows=1 | Fore='Code.exe' (ASSIGNMENT_GUIDE.md - Visual S) | OCR=840 chars (240.3ms)
+04:12:12 [INFO] memvision.engine: 🔒 SPATIAL RESCUE: Active [Notepad.exe] is blocked, but [Code.exe] is visible. Masking [Notepad.exe] and preserving [Code.exe]!
+04:12:13 [INFO] memvision.engine: 🔒 SPATIAL RESCUE: Active [Notepad.exe] is blocked, but [Code.exe] is visible. Masking [Notepad.exe] and preserving [Code.exe]!
+04:12:14 [INFO] memvision.engine: 🔒 SPATIAL RESCUE: Active [Notepad.exe] is blocked, but [Code.exe] is visible. Masking [Notepad.exe] and preserving [Code.exe]!
+04:12:15 [INFO] memvision.engine: 🔒 SPATIAL RESCUE: Active [Notepad.exe] is blocked, but [Code.exe] is visible. Masking [Notepad.exe] and preserving [Code.exe]!
+04:12:16 [INFO] memvision.engine: 🔒 SPATIAL RESCUE: Active [Notepad.exe] is blocked, but [Code.exe] is visible. Masking [Notepad.exe] and preserving [Code.exe]!
+04:12:17 [INFO] memvision.engine: 🔒 SPATIAL RESCUE: Active [Notepad.exe] is blocked, but [Code.exe] is visible. Masking [Notepad.exe] and preserving [Code.exe]!
+04:12:18 [INFO] memvision.engine: 🔒 SPATIAL RESCUE: Active [Notepad.exe] is blocked, but [Code.exe] is visible. Masking [Notepad.exe] and preserving [Code.exe]!
+04:12:19 [INFO] memvision.engine: 📸 CAPTURE #406: Windows=1 | Fore='Code.exe' (ASSIGNMENT_GUIDE.md - Visual S) | OCR=1777 chars (607.0ms)
+04:12:19 [INFO] memvision.engine: 🔒 SPATIAL RESCUE: Active [Notepad.exe] is blocked, but [Code.exe] is visible. Masking [Notepad.exe] and preserving [Code.exe]!
+04:12:20 [INFO] memvision.engine: 📸 CAPTURE #408: Windows=1 | Fore='Code.exe' (ASSIGNMENT_GUIDE.md - Visual S) | OCR=1441 chars (525.9ms)
+04:12:20 [INFO] memvision.engine: 🔒 SPATIAL RESCUE: Active [Notepad.exe] is blocked, but [Code.exe] is visible. Masking [Notepad.exe] and preserving [Code.exe]!
+04:12:21 [INFO] memvision.engine: 📸 CAPTURE #409: Windows=1 | Fore='Code.exe' (ASSIGNMENT_GUIDE.md - Visual S) | OCR=1177 chars (574.2ms)
+04:12:21 [INFO] memvision.engine: 🔒 SPATIAL RESCUE: Active [Notepad.exe] is blocked, but [Code.exe] is visible. Masking [Notepad.exe] and preserving [Code.exe]!
+04:12:22 [INFO] memvision.engine: 📸 CAPTURE #410: Windows=1 | Fore='Code.exe' (ASSIGNMENT_GUIDE.md - Visual S) | OCR=1656 chars (458.2ms)
+04:12:23 [INFO] memvision.engine: 📸 CAPTURE #411: Windows=1 | Fore='obs64.exe' (OBS 33.0.1 - Profile: Untitled) | OCR=392 chars (509.9ms)
+04:12:25 [INFO] memvision.engine: 📸 CAPTURE #413: Windows=1 | Fore='brave.exe' (Two Sum - LeetCode - Brave) | OCR=971 chars (616.8ms)
+04:12:28 [INFO] memvision.engine: 📸 CAPTURE #415: Windows=1 | Fore='brave.exe' (mem-vision-mcp | Desktop Memor) | OCR=849 chars (516.9ms)
+04:12:29 [INFO] memvision.engine: 📸 CAPTURE #417: Windows=1 | Fore='brave.exe' (mem-vision-mcp | Desktop Memor) | OCR=242 chars (595.5ms)
+04:12:33 [INFO] memvision.engine: 📸 CAPTURE #418: Windows=1 | Fore='brave.exe' (414 (1600×880) - Brave) | OCR=254 chars (330.2ms)
+04:12:35 [INFO] memvision.engine: 📸 CAPTURE #420: Windows=1 | Fore='brave.exe' (414 (1600×880) - Brave) | OCR=584 chars (412.8ms)
+04:12:37 [INFO] memvision.engine: 📸 CAPTURE #421: Windows=1 | Fore='brave.exe' (414 (1600×880) - Brave) | OCR=470 chars (437.3ms)
+04:12:37 [INFO] memvision.engine: 📸 CAPTURE #423: Windows=1 | Fore='brave.exe' (414 (1600×880) - Brave) | OCR=254 chars (328.2ms)
+04:12:39 [INFO] memvision.engine: 📸 CAPTURE #425: Windows=1 | Fore='brave.exe' (414 (1600×880) - Brave) | OCR=470 chars (383.5ms)
+04:12:40 [INFO] memvision.engine: 📸 CAPTURE #426: Windows=1 | Fore='brave.exe' (414 (1600×880) - Brave) | OCR=269 chars (340.5ms)
+04:12:43 [INFO] memvision.engine: 📸 CAPTURE #428: Windows=1 | Fore='brave.exe' (mem-vision-mcp | Desktop Memor) | OCR=261 chars (343.6ms)
+04:12:45 [INFO] memvision.engine: 📸 CAPTURE #429: Windows=1 | Fore='brave.exe' (Enheduanna — Desktop Intellige) | OCR=1090 chars (624.3ms)
+04:12:46 [INFO] memvision.engine: 🔒 SPATIAL RESCUE: Active [Notepad.exe] is blocked, but [brave.exe] is visible. Masking [Notepad.exe] and preserving [brave.exe]!
+04:12:47 [INFO] memvision.engine: 🔒 SPATIAL RESCUE: Active [Notepad.exe] is blocked, but [brave.exe] is visible. Masking [Notepad.exe] and preserving [brave.exe]!
+04:12:48 [INFO] memvision.engine: 🔒 SPATIAL RESCUE: Active [Notepad.exe] is blocked, but [brave.exe] is visible. Masking [Notepad.exe] and preserving [brave.exe]!
+04:12:49 [INFO] memvision.engine: 🔒 SPATIAL RESCUE: Active [Notepad.exe] is blocked, but [brave.exe] is visible. Masking [Notepad.exe] and preserving [brave.exe]!
+04:12:51 [INFO] memvision.engine: 📸 CAPTURE #431: Windows=1 | Fore='explorer.exe' () | OCR=3434 chars (896.7ms)
+04:12:53 [INFO] memvision.engine: 📸 CAPTURE #434: Windows=1 | Fore='explorer.exe' () | OCR=2029 chars (274.2ms)
+04:12:54 [INFO] memvision.engine: 📸 CAPTURE #435: Windows=2 | Fore='WindowsTerminal.exe' (Windows PowerShell) | OCR=4252 chars (433.3ms)
+
+
+---
+
+## 6. Core Integration & Policy Gate Audit Log
+
+> **Source Trace:** Live terminal execution of pm start in pp/core during demo recording.\n> **Standalone File:** [core-demo-audit.md](core-demo-audit.md)\n\n\	ext
+Windows PowerShell 5.1
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+PS C:\Demo-run-folder\enheduanna-meta-submission-main\enheduanna-meta-submission-main\app\core> npm start
+
+> enheduanna-core@1.0.0 start
+> node dist/index.js
+
+  𒀭 Enheduanna Integration Core Service
+  • Host: http://127.0.0.1:4100
+  • Model: muse-spark-1.3 (meta)
+  • Auth: API Key configured for META (LLM_...Id14)
+------------------------------------------------------------------
+03:19:07 [INFO] memvision.privacy: Loaded 17 app, 25 URL, 21 title rules, and 13 text redaction patterns (mode=blocklist).
+03:19:07 [INFO] memvision.storage: SQLite database and FTS5 full-text index initialized at C:\Demo-run-folder\enheduanna-meta-submission-main\enheduanna-meta-submission-main\memvison\data\memvision.db
+03:19:07 [INFO] mcp_server: mem-vision-mcp MCP Server started listening on stdio.
+[cli-bridge] Workspace root set to: C:\Demo-run-folder\enheduanna-meta-submission-main\enheduanna-meta-submission-main
+[cli-bridge] Using bundled ripgrep binary: C:\Demo-run-folder\enheduanna-meta-submission-main\cli-bridge\node_modules\@vscode\ripgrep-win32-x64\bin\rg.exe
+[cli-bridge] Dev Mode initialized: OFF (shell execution BLOCKED)
+[cli-bridge] Policy mode ACTIVE with 2 root(s).
+[cli-bridge] Server connected and listening on stdin/stdout
+  🚀 Enheduanna Server is LIVE at http://127.0.0.1:4100
+  • Dashboard: http://127.0.0.1:4100/
+------------------------------------------------------------------
+03:53:52 [INFO] memvision.storage: Backfilled 2 activity session summaries.
+03:54:30 [INFO] mcp_server: Served get_window_crop: capture=213, window=0, app='brave.exe', size=1280x704, bytes=53432, redacted=False
+03:54:30 [INFO] mcp_server: Served get_window_crop: capture=154, window=0, app='brave.exe', size=1280x704, bytes=13242, redacted=False
+03:54:30 [INFO] mcp_server: Served get_window_crop: capture=120, window=0, app='brave.exe', size=1280x704, bytes=17296, redacted=False
+[cli-bridge] Tool invocation: get_dev_mode_status with args {}
+[cli-bridge] Tool invocation: toggle_dev_mode with args {"enable_dev_mode":true}
+[cli-bridge] Dev Mode is now ON. Shell command execution is enabled until you turn it off or restart the server.
+[cli-bridge] Tool invocation: toggle_dev_mode with args {"enable_dev_mode":true}
+[cli-bridge] Dev Mode is now ON. Shell command execution is enabled until you turn it off or restart the server.
+[cli-bridge] Tool invocation: execute_command with args {"args":["-m","webbrowser","https://leetcode.com/problems/two-sum/"],"command":"python"}
+[cli-bridge] Blocked: Command "python" with inline evaluation flag "-m" is restricted. (rule: CMD_RESTRICTED_INLINE_INTERPRETER)
+[cli-bridge] Tool invocation: toggle_dev_mode with args {"enable_dev_mode":true}
+[cli-bridge] Dev Mode is now ON. Shell command execution is enabled until you turn it off or restart the server.
+[cli-bridge] Tool invocation: execute_command with args {"args":["https://leetcode.com/problems/two-sum/"],"command":"explorer"}
+[cli-bridge] Blocked: Command "explorer" required approval and was denied/rejected by approver. (rule: CMD_UNKNOWN_ASK)
+[cli-bridge] Tool invocation: request_command_access with args {"command":"explorer","reason":"Need to open LeetCode Two Sum page in default browser for user to submit solution"}
+[cli-bridge] Session command approval granted for "explorer". Command can now be executed until server restart (Dev Mode must still be enabled).
+[cli-bridge] Tool invocation: toggle_dev_mode with args {"enable_dev_mode":true}
+[cli-bridge] Dev Mode is now ON. Shell command execution is enabled until you turn it off or restart the server.
+[cli-bridge] Tool invocation: execute_command with args {"args":["https://leetcode.com/problems/two-sum/description/"],"command":"explorer"}
+[cli-bridge] Executing command: "explorer" with args: ["https://leetcode.com/problems/two-sum/description/"] in cwd: "C:\meta hackathon\cli-bridge" (timeout: 30000ms, shell: false)
+[cli-bridge] Tool invocation: toggle_dev_mode with args {"enable_dev_mode":true}
+[cli-bridge] Dev Mode is now ON. Shell command execution is enabled until you turn it off or restart the server.
+[cli-bridge] Tool invocation: execute_command with args {"args":["https://en.wikipedia.org/wiki/History_of_Sumer#Historiography"],"command":"explorer"}
+[cli-bridge] Executing command: "explorer" with args: ["https://en.wikipedia.org/wiki/History_of_Sumer#Historiography"] in cwd: "C:\meta hackathon\cli-bridge" (timeout: 30000ms, shell: false)
+[cli-bridge] Tool invocation: request_path_access with args {"access":"ro","path":"C:\\Demo-run-folder","reason":"Need to locate ASSIGNMENT.pdf to reopen it for user at Q3"}
+[cli-bridge] Session access granted for "C:\Demo-run-folder" (ro). Directory is now accessible until server restart.
+[cli-bridge] Tool invocation: list_directory with args {"path":"C:\\Demo-run-folder"}
+[cli-bridge] Tool invocation: toggle_dev_mode with args {"enable_dev_mode":true}
+[cli-bridge] Dev Mode is now ON. Shell command execution is enabled until you turn it off or restart the server.
+[cli-bridge] Tool invocation: execute_command with args {"args":["C:\\Demo-run-folder\\ASSIGNMENT.pdf"],"command":"explorer"}
+[cli-bridge] Executing command: "explorer" with args: ["C:\\Demo-run-folder\\ASSIGNMENT.pdf"] in cwd: "C:\meta hackathon\cli-bridge" (timeout: 30000ms, shell: false)
+[cli-bridge] Tool invocation: request_path_access with args {"access":"rw","path":"C:\\Demo-run-folder","reason":"Need write access to create .md study guide alongside ASSIGNMENT.pdf"}
+[cli-bridge] Session access granted for "C:\Demo-run-folder" (rw). Directory is now accessible until server restart.
+[cli-bridge] Tool invocation: write_file with args {"content":"# ASSIGNMENT - Concepts & How to Solve Similar Questions\n\n> Companion guide for `ASSIGNMENT.pdf` in this same folder (`C:\\Demo-run-folder`)\n> Covers Q1 (Linear Equation), Q2 (Area of Circle), Q3 (Derivatives)\n\n---\n\n## Q1 - Solve for x: 3x + 7 = 22\n\n### Answer: x = 5\n\n```\n3x + 7 = 22\n3x = 22 - 7\n3x = 15\nx = 15 / 3\nx = 5\n\nCheck: 3*5 + 7 = 15 + 7 = 22 ✓\n```\n\n### Concept: Linear Equation in One Variable\n\nA linear equation looks like: `ax + b = c`\n\nGoal: **isolate x** - get x alone on one side.\n\nCore idea: **Do the opposite operation to both sides to keep balance.**\n- Equation is like a weighing scale. Whatever you do left, do right.\n- Undo addition with subtraction, undo multiplication with division.\n- Order: undo + / - first, then * / / (reverse of BODMAS).\n\n### Step-by-step Method (works for all similar Qs)\n\n1. **Move constant term:** Subtract/add `b` from both sides.\n   `ax = c - b`\n2. **Move coefficient:** Divide both sides by `a`.\n   `x = (c - b) / a`\n3. **Check:** Plug x back into original LHS, must equal RHS.\n\n### Similar Examples\n\n**Ex A: 5x - 3 = 17**\n```\n5x = 17 + 3 = 20\nx = 20/5 = 4\n```\n\n**Ex B: 2x + 9 = 3**\n```\n2x = 3 - 9 = -6\nx = -3\n```\n\n**Ex C: x/4 + 5 = 9**\n```\nx/4 = 4\nx = 16\n```\n\n### Common Mistakes\n- Forgetting to apply operation to BOTH sides\n- Sign error: `3x + 7 = 22` -> `3x = 22 + 7` (wrong, should be minus)\n- Dividing only part: `3x = 15` -> `x = 15 - 3` (wrong, divide not subtract)\n\n### Practice These\n1. 4x + 5 = 29 → x = 6\n2. 7x - 8 = 13 → x = 3\n3. 2x + 11 = 3 → x = -4\n\n---\n\n## Q2 - Area of Circle, r = 7 cm (Use π = 22/7)\n\n### Answer: 154 cm²\n\n```\nArea = πr²\n     = 22/7 × 7²\n     = 22/7 × 49\n     = 22 × 7\n     = 154 cm²\n```\n\n### Concept: Area of a Circle\n\nFormula: **A = πr²**\n\n- `r` = radius (center to edge). NOT diameter.\n- `r²` = r × r. Square FIRST, then multiply by π.\n- `π (pi)` ≈ 22/7 ≈ 3.14. Use 22/7 when r is multiple of 7 (7, 14, 21...) because 7 cancels nicely.\n- Unit: always **square units** - cm², m².\n\nWhy 22/7 here? Because r = 7:\n`22/7 × 7 × 7` → one 7 cancels → `22 × 7 = 154`. Clean, no decimals.\n\n### Step-by-step Method\n\n1. Identify `r`. If given diameter `d`, then `r = d/2`.\n2. Compute `r² = r × r`.\n3. Multiply by π (22/7 or 3.14 as asked).\n4. Cancel / simplify before multiplying big numbers.\n5. Add ² to unit.\n\n### Similar Examples\n\n**Ex A: r = 14 cm, π = 22/7**\n```\nA = 22/7 × 14 × 14\n  = 22 × 2 × 14\n  = 616 cm²\n```\n\n**Ex B: r = 3.5 cm, π = 22/7**\n```\nA = 22/7 × 3.5 × 3.5\n  = 22/7 × 12.25\n  = 38.5 cm²\n```\n\n**Ex C: diameter = 10 cm, π = 3.14**\n```\nr = 5\nA = 3.14 × 25 = 78.5 cm²\n```\n\n### Radius vs Diameter vs Circumference - Don't Mix!\n- Radius = d/2\n- Diameter = 2r\n- Area = πr² (space inside)\n- Circumference = 2πr (boundary length)\n\nIf Q asks area but gives diameter, halve it first!\n\n### Common Mistakes\n- Using diameter as r\n- Doing `πr × 2` instead of `πr²`\n- Forgetting cm² (writing cm)\n- Using 3.14 when Q says use 22/7\n\n### Practice These\n1. r = 21 cm, π=22/7 → 1386 cm²\n2. r = 10 cm, π=3.14 → 314 cm²\n3. d = 14 cm, π=22/7 → r=7 → 154 cm²\n\n---\n\n## Q3 - Find the derivative of f(x) = [polynomial] + 5x\n\n> In your PDF: `f(x) = ... + 5x` (first term was cut off in my screen capture).\n> This guide covers the general method so ANY version is solvable.\n\n### Most Likely Q3 Cases\n\n**If Q3 is f(x) = x² + 5x:**\n```\nf'(x) = 2x + 5\n```\n\n**If Q3 is f(x) = x³ + 5x:**\n```\nf'(x) = 3x² + 5\n```\n\n**If Q3 is f(x) = 2x² + 5x:**\n```\nf'(x) = 4x + 5\n```\n\nGeneral: if `f(x) = axⁿ + 5x`, then `f'(x) = a·n·xⁿ⁻¹ + 5`\n\n### Concept: Derivative = Rate of Change / Slope\n\n`f'(x)` or `dy/dx` tells you slope of curve at any x.\n\nYou don't need limits for this assignment. Just 3 rules:\n\n#### 1. Power Rule (the main one)\n```\nd/dx [ xⁿ ] = n·xⁿ⁻¹\n```\nBring power down in front, reduce power by 1.\n\n- x² → 2x¹ = 2x\n- x³ → 3x²\n- x⁴ → 4x³\n- x → 1x⁰ = 1\n\n#### 2. Constant Multiple Rule\n```\nd/dx [ a·xⁿ ] = a·n·xⁿ⁻¹\n```\nKeep the coefficient, apply power rule.\n\n- 2x² → 2·2x = 4x\n- 5x → 5·1 = 5\n- 3x³ → 9x²\n\n#### 3. Sum Rule + Constant Rule\n```\nd/dx [ u + v ] = u' + v'\nd/dx [ constant ] = 0\n```\nDifferentiate term-by-term. Constants disappear.\n\n- f(x) = x² + 5x + 7 → f' = 2x + 5 + 0 = 2x + 5\n\n### Step-by-step Method for Q3-type\n\n1. Split into terms: Term1 + Term2 (+ constant?)\n2. Apply Power Rule to each x-term separately.\n3. Derivative of `5x` is ALWAYS `5`.\n4. Derivative of plain number is ALWAYS `0`.\n5. Combine, simplify.\n\nWorked: `f(x) = x² + 5x`\n```\nTerm1: x² → 2x\nTerm2: 5x → 5\nf'(x) = 2x + 5\n```\n\n### Similar Examples (Full)\n\n**Ex A: f(x) = x² + 3x + 2**\n```\nf' = 2x + 3 + 0 = 2x + 3\n```\n\n**Ex B: f(x) = 3x³ + 2x² + 5x + 10**\n```\nf' = 9x² + 4x + 5 + 0\n   = 9x² + 4x + 5\n```\n\n**Ex C: f(x) = 4x⁴ - 6x² + x**\n```\nf' = 16x³ - 12x + 1\n```\n\n**Ex D: f(x) = 5x (just this)**\n```\nf' = 5\n```\n\n### Why is derivative of 5x = 5?\n`5x = 5·x¹` → Power Rule: `5·1·x⁰ = 5·1·1 = 5`.\nGraph is a straight line with slope 5, so slope is constant 5 everywhere.\n\n### Common Mistakes\n- `x² → 2` (wrong, forgot the x: should be 2x)\n- `5x → 5x` (wrong, should be just 5)\n- `7 → 7` (wrong, constant → 0)\n- `2x² → 2x` (wrong, forgot to multiply by 2: should be 4x)\n- Reducing power but not bringing it down\n\n### Quick Power Table (memorize)\n| f(x) | f'(x) |\n|------|-------|\n| x | 1 |\n| x² | 2x |\n| x³ | 3x² |\n| x⁴ | 4x³ |\n| 5x | 5 |\n| 7 (const) | 0 |\n| axⁿ | a·n·xⁿ⁻¹ |\n\n### Practice These\n1. f(x) = x² + 7x → 2x + 7\n2. f(x) = 2x³ + 4x → 6x² + 4\n3. f(x) = x³ + 2x² + 5x + 1 → 3x² + 4x + 5\n4. f(x) = 5x² - 3x + 9 → 10x - 3\n\n---\n\n## One-Page Cheat Sheet\n\n```\nQ1 LINEAR: ax + b = c → x = (c - b)/a\n  Undo +,- then *,/ on both sides. Check by plugging back.\n\nQ2 CIRCLE: A = πr²\n  r = d/2. Square r first. Use 22/7 if r multiple of 7. Unit cm².\n\nQ3 DERIVATIVE: d/dx[xⁿ] = n·xⁿ⁻¹\n  Term-by-term. 5x→5. Constant→0.\n  x²+5x → 2x+5\n```\n\n## How to Approach Any Similar Assignment\n\n1. **Identify type first:** Is it isolate-x? Area? Derivative?\n2. **Write formula/rule down** before plugging numbers.\n3. **Show steps** - teachers give step marks even if arithmetic slips.\n4. **Check:** Q1 plug back, Q2 estimate size, Q3 verify each term.\n5. **Units:** cm² for area, no units for pure algebra/derivative unless given.\n\n---\n*Generated by Enheduanna - 2026-11-03 - for ASSIGNMENT.pdf review*\n","path":"C:\\Demo-run-folder\\ASSIGNMENT_GUIDE.md"}
+[cli-bridge] Writing file: "C:\Demo-run-folder\ASSIGNMENT_GUIDE.md" (content length: 6220 characters)
+[cli-bridge] Tool invocation: search_files with args {"pattern":"ASSIGNMENT_GUIDE.md"}
+[cli-bridge] Tool invocation: list_directory with args {"path":"."}
+[cli-bridge] Tool invocation: list_directory with args {"path":".","recursive":true}
+[cli-bridge] Tool invocation: list_directory with args {"path":"docs"}
+[cli-bridge] Tool invocation: request_path_access with args {"access":"rw","path":"C:\\Demo-run-folder","reason":"Need to read and edit ASSIGNMENT_GUIDE.md to remove Q1 section, keeping only Q2 and Q3 as requested"}
+[cli-bridge] Session access granted for "C:\Demo-run-folder" (rw). Directory is now accessible until server restart.
+[cli-bridge] Tool invocation: list_directory with args {"path":"C:\\Demo-run-folder"}
+[cli-bridge] Tool invocation: read_file with args {"path":"C:\\Demo-run-folder\\ASSIGNMENT_GUIDE.md"}
+[cli-bridge] Tool invocation: edit_file with args {"new_str":"> Companion guide for `ASSIGNMENT.pdf` in this same folder (`C:\\Demo-run-folder`)\n> Covers Q2 (Area of Circle), Q3 (Derivatives)\n\n---\n\n## Q2 - Area of Circle, r = 7 cm (Use π = 22/7)","old_str":"> Companion guide for `ASSIGNMENT.pdf` in this same folder (`C:\\Demo-run-folder`)\n> Covers Q1 (Linear Equation), Q2 (Area of Circle), Q3 (Derivatives)\n\n---\n\n## Q1 - Solve for x: 3x + 7 = 22\n\n### Answer: x = 5\n\n```\n3x + 7 = 22\n3x = 22 - 7\n3x = 15\nx = 15 / 3\nx = 5\n\nCheck: 3*5 + 7 = 15 + 7 = 22 ✓\n```\n\n### Concept: Linear Equation in One Variable\n\nA linear equation looks like: `ax + b = c`\n\nGoal: **isolate x** - get x alone on one side.\n\nCore idea: **Do the opposite operation to both sides to keep balance.**\n- Equation is like a weighing scale. Whatever you do left, do right.\n- Undo addition with subtraction, undo multiplication with division.\n- Order: undo + / - first, then * / / (reverse of BODMAS).\n\n### Step-by-step Method (works for all similar Qs)\n\n1. **Move constant term:** Subtract/add `b` from both sides.\n   `ax = c - b`\n2. **Move coefficient:** Divide both sides by `a`.\n   `x = (c - b) / a`\n3. **Check:** Plug x back into original LHS, must equal RHS.\n\n### Similar Examples\n\n**Ex A: 5x - 3 = 17**\n```\n5x = 17 + 3 = 20\nx = 20/5 = 4\n```\n\n**Ex B: 2x + 9 = 3**\n```\n2x = 3 - 9 = -6\nx = -3\n```\n\n**Ex C: x/4 + 5 = 9**\n```\nx/4 = 4\nx = 16\n```\n\n### Common Mistakes\n- Forgetting to apply operation to BOTH sides\n- Sign error: `3x + 7 = 22` -> `3x = 22 + 7` (wrong, should be minus)\n- Dividing only part: `3x = 15` -> `x = 15 - 3` (wrong, divide not subtract)\n\n### Practice These\n1. 4x + 5 = 29 → x = 6\n2. 7x - 8 = 13 → x = 3\n3. 2x + 11 = 3 → x = -4\n\n---\n\n## Q2 - Area of Circle, r = 7 cm (Use π = 22/7)","path":"C:\\Demo-run-folder\\ASSIGNMENT_GUIDE.md"}
+[cli-bridge] Editing file: "C:\Demo-run-folder\ASSIGNMENT_GUIDE.md"
+[cli-bridge] Tool invocation: edit_file with args {"new_str":"```\nQ2 CIRCLE: A = πr²","old_str":"```\nQ1 LINEAR: ax + b = c → x = (c - b)/a\n  Undo +,- then *,/ on both sides. Check by plugging back.\n\nQ2 CIRCLE: A = πr²","path":"C:\\Demo-run-folder\\ASSIGNMENT_GUIDE.md"}
+[cli-bridge] Editing file: "C:\Demo-run-folder\ASSIGNMENT_GUIDE.md"
+[cli-bridge] Tool invocation: edit_file with args {"new_str":"1. **Identify type first:** Is it Area? Derivative?\n2. **Write formula/rule down** before plugging numbers.\n3. **Show steps** - teachers give step marks even if arithmetic slips.\n4. **Check:** Q2 estimate size, Q3 verify each term.\n5. **Units:** cm² for area, no units for pure derivative unless given.","old_str":"1. **Identify type first:** Is it isolate-x? Area? Derivative?\n2. **Write formula/rule down** before plugging numbers.\n3. **Show steps** - teachers give step marks even if arithmetic slips.\n4. **Check:** Q1 plug back, Q2 estimate size, Q3 verify each term.\n5. **Units:** cm² for area, no units for pure algebra/derivative unless given.","path":"C:\\Demo-run-folder\\ASSIGNMENT_GUIDE.md"}
+[cli-bridge] Editing file: "C:\Demo-run-folder\ASSIGNMENT_GUIDE.md"
+```
