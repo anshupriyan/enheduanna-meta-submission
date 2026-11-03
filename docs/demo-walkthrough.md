@@ -34,14 +34,4 @@ The developer steps away from the desk:
 - Working memory decays.
 - In traditional setups, returning requires re-reading open tabs, re-searching browser history, hunting for the right editor tab, and manually reconstructing what was left unfinished.
 
----
 
-## 4. Post-Break Recovery: How Enheduanna Helps
-
-When the developer returns to the workstation, Enheduanna seamlessly restores their entire workflow without the user having to supply any URLs, filenames, or background context:
-
-- **Rebuilding Context from Memory**: Enheduanna analyzes the last 40 minutes of desktop activity across the 231 background captures, reconstructing exactly what the user was working on before stepping away.
-- **Restoring Active Workspaces & Deep Pages**: She automatically reopens the exact destinations where the user left off—relaunching the LeetCode question, reopening the Wikipedia article on Sumer at the exact section previously read, and bringing back the assignment PDF.
-- **Locating and Modifying the Unnamed File**: Even though VS Code was running full-screen and the user never provided a file path or formal document name, Enheduanna identifies the draft markdown file from screen memory and applies the requested edits.
-- **Clarifying Visuals with Igi**: When the developer needs an explanation of a complex Sumerian timeline chart on screen, they press `Ctrl+Shift+Q` and circle the diagram; Igi snaps to the chart boundaries and provides a direct visual explanation of that specific region.
-- **Governed Action with Explicit Permission**: Before modifying files or running commands on disk, Enheduanna pauses and prompts for user authorization with a 120-second auto-denying approval card, ensuring no changes occur without consent.
