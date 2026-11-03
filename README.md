@@ -35,6 +35,16 @@ Named after Enheduanna of Ur (c. 2300 BCE), the world's first known author, it d
 
 **Private by design:** Your screen memory stays on your machine. When you ask a question, Enheduanna sends the model only what's relevant to it: your question, the matching memory snippets or files it retrieved, and screenshots only when they're needed, either of what you circled with IGI or a saved one from memory that helps answer a question about your past.
 
+### Why Enheduanna
+
+- **Less context-feeding.** Skip the copy-paste and the re-explaining. She already knows what was on your screen.
+- **Pick up where you left off.** Come back from a break and continue your session without backtracking. Reopen the exact page, file, or task in one ask.
+- **Your data stays on your machine.** Screen capture, OCR, and masking all run locally. Only the snippets needed to answer a question go to the Meta Model API.
+- **You control what’s accessed.** Sensitive apps, titles, and URLs are masked before anything is read.
+- **You control what’s executed.** Every file action and command is gated by permission: allowed, blocked, or waiting for your Allow or Deny.
+- **Got a question? Circle it.** Use Igi on the screen to ask about whatever’s in front of you, or to trace it back through your screen memory.
+- **Memory plus action.** Combine both: she recalls what you were doing, then acts on it, such as finding the file, editing it, or opening the page.
+
 ---
 
 > [!NOTE]
