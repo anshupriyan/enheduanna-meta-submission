@@ -260,9 +260,22 @@ In a separate terminal:
 
 ### 6. Turn on memory
 
-In the dashboard, switch recording **on**. This starts the memvision capture loop. Memory builds as you use your computer, so give it **3 to 5 minutes** before asking about your past. The steps below are ordered so you can try everything else in the meantime.
+In the dashboard, locate the capture pill in the top bar. Click it to turn green (`● Recording (2s)`) to start the memvision capture loop:
 
-*Optional:* `cd memvison; .\.venv\Scripts\python.exe main.py ui` opens the memory timeline at http://127.0.0.1:8765.
+<p align="center">
+  <img src="docs/images/memory_capture_pill.png" alt="Turn on Memory - Capture Pill" width="850">
+</p>
+
+> **The capture pill is here:** Click it to turn green and start the memvision capture loop to start capturing the memory.
+
+Memory builds as you use your computer, so give it **3 to 5 minutes** before asking about your past. The steps below are ordered so you can try everything else in the meantime.
+
+*Optional: Open the standalone memory timeline viewer at [http://127.0.0.1:8765](http://127.0.0.1:8765) in a separate terminal:*
+
+```cmd
+cd memvison
+.\.venv\Scripts\python.exe main.py ui
+```
 
 ---
 
