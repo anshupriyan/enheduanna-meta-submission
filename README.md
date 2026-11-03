@@ -4,6 +4,11 @@
 
 ### *Knows the past, governs the present, guides the future*
 
+[![YouTube Demo Video](https://img.shields.io/badge/YouTube-Demo%20Video%20(3%20min)-red?style=for-the-badge&logo=youtube)](https://www.youtube.com/watch?v=xIki_fogB-I)
+[![Meta Global AI Hackathon](https://img.shields.io/badge/Meta%20Global%20AI%20Hackathon-Indie%20Track-0081FB?style=for-the-badge&logo=meta)](https://github.com/anshupriyan/enheduanna-meta-submission)
+
+**📺 Demo Video (3 mins):** [https://www.youtube.com/watch?v=xIki_fogB-I](https://www.youtube.com/watch?v=xIki_fogB-I)
+
 </div>
 
 ---
@@ -65,6 +70,7 @@ Named after Enheduanna of Ur (c. 2300 BCE), the world's first known author, it d
 | [**Architecture**](#architecture) | High-level dataflow diagram, 4-tier desktop memory pipeline, and deep-dive links to [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
 | [**Setup**](#setup) | Prerequisites, 1-click `setup.bat`, configuration keys (`enheduanna.config.json`), and daemon startup |
 | [**Try it**](#try-it) | Web interface (`:4100`), sample memory questions, and IGI on-screen overlay hotkey (`Ctrl+Shift+Q`) |
+| [**Demo Data & Walkthrough**](#demo-data--walkthrough) | 3-minute video link, scenario narrative, line-by-line chat transcripts, and daemon capture/policy audits |
 | [**Tools (24)**](#tools) | Complete 24-tool catalog across MemVision (9), cli-bridge (14), and Core runtime (1) |
 | [**Privacy & Safety**](#privacy--safety) | 3-tier privacy engine, regex scrubbing, split-screen blackout curtain, and human approval gates |
 | [**Verification**](#verification) | 1-click test runner (`verify_all_tests.ps1`), claim-to-test mapping, answer-quality eval, and [`docs/test-runs.md`](docs/test-runs.md) |
@@ -269,6 +275,20 @@ In the dashboard, switch recording **on**. This starts the memvision capture loo
 | 6 | Open a video or article for a minute, then ask **"What page or video did I just have open, and who made it?"** | The answer names it |
 
 If an answer comes back saying there is not enough memory or no memory captured, recording was off or not enough time has passed.
+
+---
+
+## Demo Data & Walkthrough
+
+The complete hackathon walkthrough demonstrates returning from a 40-minute break with zero context and resuming workflow without resistance.
+
+- 📺 **Watch the Demo Video (3 mins):** [https://www.youtube.com/watch?v=xIki_fogB-I](https://www.youtube.com/watch?v=xIki_fogB-I)
+- 📄 **Scenario Walkthrough & Full Chat Transcript:** [`docs/demo-walkthrough.md`](docs/demo-walkthrough.md)  
+  *Detailed narrative of the 40-minute pre-break session (LeetCode, Sumerian history on Wikipedia, assignment PDF, YouTube OBS tutorial), zero-context recovery, deep link re-opening, unnamed file editing in VS Code, and Igi visual snapping (`Ctrl+Shift+Q`), followed by the raw line-by-line tool execution transcript from `sessions.json`.*
+- 📸 **MemVision Engine Capture Trace:** [`docs/memvision-demo-audit.md`](docs/memvision-demo-audit.md)  
+  *Live terminal capture trace of the `memvision main.py ui` daemon polling loop across 231 screen captures (#65 to #231), window transitions, and WinRT OCR timings.*
+- 🛡️ **Core Integration & Policy Gate Trace:** [`docs/core-demo-audit.md`](docs/core-demo-audit.md)  
+  *Live `app/core` runtime trace documenting Dev Mode toggles, policy gate evaluation, human approval events, and file writes.*
 
 ---
 
